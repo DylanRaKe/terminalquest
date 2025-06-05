@@ -5,6 +5,9 @@ import { Navigation } from "./components/Navigation";
 import { StructuredData } from "./components/StructuredData";
 import { AccessibilityProvider } from "./components/AccessibilityProvider";
 import { AccessibilityPanel } from "./components/AccessibilityPanel";
+import { ProgressionProvider } from "./components/ProgressionProvider";
+import { ProgressionPanel } from "./components/ProgressionPanel";
+import { AchievementNotification } from "./components/AchievementNotification";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -70,11 +73,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
       >
         <AccessibilityProvider>
-          <div className="min-h-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-            <Navigation />
-            {children}
-            <AccessibilityPanel />
-          </div>
+          <ProgressionProvider>
+            <div className="min-h-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+              <Navigation />
+              {children}
+              <ProgressionPanel />
+              <AchievementNotification />
+              <AccessibilityPanel />
+            </div>
+          </ProgressionProvider>
         </AccessibilityProvider>
       </body>
     </html>

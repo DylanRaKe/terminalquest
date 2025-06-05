@@ -6,6 +6,7 @@ import { SandboxEngine, SandboxResponse } from '../lib/sandboxEngine'
 import { useResponsive, useTouchDevice, useReducedMotion } from '../hooks/useResponsive'
 import { VirtualKeyboard } from './VirtualKeyboard'
 import { Keyboard } from 'lucide-react'
+import { useProgressionStore } from '../stores/progressionStore'
 
 interface TerminalLine {
   type: 'command' | 'output' | 'error' | 'suggestion'
@@ -37,10 +38,11 @@ export function SandboxTerminal() {
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   
-  // Hooks pour la responsivité
+  // Hooks pour la responsivité et progression
   const { isMobile, isTablet, windowSize } = useResponsive()
   const { isTouchDevice } = useTouchDevice()
   const { prefersReducedMotion } = useReducedMotion()
+  const { recordCommand } = useProgressionStore()
 
   useEffect(() => {
     // Auto-focus sur l'input
@@ -71,6 +73,11 @@ export function SandboxTerminal() {
 
     // Exécuter la commande
     const response: SandboxResponse = engine.executeCommand(command)
+    
+    // Enregistrer la commande pour la progression
+    const commandName = command.split(' ')[0]
+    console.log('Commande exécutée:', commandName, 'Valide:', response.commandValid)
+    recordCommand(commandName, response.commandValid)
 
     // Gérer la commande clear
     if (response.output.includes('CLEAR_TERMINAL')) {

@@ -9,12 +9,12 @@ import { useResponsive } from '../hooks/useResponsive'
 import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
 import { useState, useRef, useEffect, useCallback } from 'react'
 
+
 export function MainInterface() {
   const isDebugMode = useDebugMode()
   const { isMobile, isTablet } = useResponsive()
   const [focusedCardIndex, setFocusedCardIndex] = useState(-1)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
-  
   const cards = [
     { id: 'game', href: '/game', available: isDebugMode },
     { id: 'training', href: '/training', available: true },
@@ -56,7 +56,7 @@ export function MainInterface() {
     if (firstAvailableIndex >= 0) {
       setFocusedCardIndex(firstAvailableIndex)
     }
-  }, [isDebugMode])
+  }, [isDebugMode, cards])
   
   return (
     <div className="min-h-screen flex items-center justify-center p-4 pt-20">
@@ -166,7 +166,7 @@ export function MainInterface() {
                     </div>
                     <div className="flex items-center justify-center gap-2">
                       <Target className="w-4 h-4" />
-                      <span>En cours d'amélioration</span>
+                                              <span>En cours d&apos;amélioration</span>
                     </div>
                   </div>
                   
@@ -191,7 +191,7 @@ export function MainInterface() {
                     <Target className="w-10 h-10 text-white" />
                   </div>
                   
-                  <h2 className="text-3xl font-bold text-white mb-4">🎯 Entraînement</h2>
+                                      <h2 className="text-3xl font-bold text-white mb-4">🎯 Entraînement</h2>
                   <p className="text-gray-400 mb-6 leading-relaxed">
                     Pratiquez librement dans un terminal sandbox avec validation en temps réel et suggestions intelligentes.
                   </p>
@@ -207,9 +207,9 @@ export function MainInterface() {
                     </div>
                   </div>
                   
-                  <div className="mt-6 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-3 px-6 rounded-xl group-hover:from-blue-600 group-hover:to-cyan-600 transition-all duration-200">
-                    Commencer l'Entraînement
-                  </div>
+                                      <div className="mt-6 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-3 px-6 rounded-xl group-hover:from-blue-600 group-hover:to-cyan-600 transition-all duration-200">
+                      Commencer l&apos;Entraînement
+                    </div>
                 </div>
               </div>
             </Link>
@@ -298,7 +298,7 @@ export function MainInterface() {
           className="text-center"
         >
           <div className="bg-black/30 backdrop-blur-lg rounded-xl p-6 border border-gray-700/50">
-            <h3 className="text-xl font-bold text-white mb-4">🎯 Objectifs d'apprentissage</h3>
+                                <h3 className="text-xl font-bold text-white mb-4">🎯 Objectifs d&apos;apprentissage</h3>
             <div className="grid md:grid-cols-3 gap-6 text-gray-400">
               <div>
                 <div className="text-2xl mb-2">🗂️</div>

@@ -27,7 +27,7 @@ const defaultSettings: AccessibilitySettings = {
   reducedMotion: false,
   screenReader: false,
   keyboardNavigation: true,
-  focusVisible: true
+  focusVisible: false
 }
 
 const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined)

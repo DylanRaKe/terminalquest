@@ -3,9 +3,9 @@
 ## 🎯 Fonctionnalités Pédagogiques
 
 ### 1. **Système de Progression & Achievements**
-- [ ] Badges pour différents accomplissements (Quiz parfait, Commandes maîtrisées, etc.)
-- [ ] Système de niveaux utilisateur (Novice → Expert)
-- [ ] Historique détaillé des performances
+- [x] Badges pour différents accomplissements (Quiz parfait, Commandes maîtrisées, etc.)
+- [x] Système de niveaux utilisateur (Novice → Expert)
+- [x] Historique détaillé des performances
 - [ ] Certificats de réussite téléchargeables
 
 ### 2. **Mode Entraînement Libre**
