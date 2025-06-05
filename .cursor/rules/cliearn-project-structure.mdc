@@ -1,0 +1,63 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# CLIearn - Structure du Projet
+
+## Vue d'ensemble
+CLIearn est un jeu éducatif interactif pour apprendre les commandes CLI Linux, construit avec Next.js, React, TypeScript et Zustand.
+
+## Architecture Principale
+
+### Composants Principaux
+- [GameInterface.tsx](mdc:app/components/GameInterface.tsx) - Interface principale du jeu avec terminal, carte et inventaire
+- [Terminal.tsx](mdc:app/components/Terminal.tsx) - Composant terminal avec autocomplétion TAB et historique
+- [CLIDocumentation.tsx](mdc:app/components/CLIDocumentation.tsx) - Documentation complète des commandes CLI avec recherche
+- [GameMap.tsx](mdc:app/components/GameMap.tsx) - Carte interactive du monde du jeu
+- [PlayerStats.tsx](mdc:app/components/PlayerStats.tsx) - Statistiques et progression du joueur
+- [CommandInventory.tsx](mdc:app/components/CommandInventory.tsx) - Inventaire des commandes débloquées
+- [NPCGuide.tsx](mdc:app/components/NPCGuide.tsx) - Guide NPC avec conseils contextuels
+
+### Logique Métier
+- [terminalEngine.ts](mdc:app/lib/terminalEngine.ts) - Moteur de simulation terminal avec commandes authentiques Linux
+- [gameStore.ts](mdc:app/stores/gameStore.ts) - État global du jeu avec Zustand (sans persistance)
+
+### Pages
+- [page.tsx](mdc:app/page.tsx) - Page principale du jeu
+- [docs/page.tsx](mdc:app/docs/page.tsx) - Page de documentation CLI accessible via lien
+
+## Fonctionnalités Clés
+
+### Terminal Authentique
+- Simulation réaliste des commandes Linux (ls, cd, cat, mkdir, touch, cp, mv, rm, pwd, grep, chmod, wget, curl)
+- Messages d'erreur au format Linux standard
+- Autocomplétion intelligente avec TAB
+- Navigation avec flèches dans les suggestions
+- Historique des commandes
+
+### Système de Progression
+- Déblocage progressif des commandes via exploration
+- Système de lieux (village, maison, boutique) avec contenu contextuel
+- Achievements et progression du joueur
+- Contenu narratif immersif
+
+### Documentation Intégrée
+- 14+ commandes documentées avec exemples terminal réels
+- Barre de recherche en temps réel
+- Filtrage par catégories (Navigation, Gestion de Fichiers, Contenu, Système, Concepts de Base)
+- Modales détaillées avec syntaxe, exemples et notes importantes
+
+## Technologies Utilisées
+- **Frontend**: Next.js 14, React, TypeScript
+- **Styling**: Tailwind CSS avec animations Framer Motion
+- **État**: Zustand (sans localStorage)
+- **Icônes**: Lucide React
+- **Formulaires**: React Hook Form pour le terminal
+
+## Conventions de Code
+- Tout en français sauf les exemples de terminal (authentiques en anglais)
+- Composants TypeScript avec interfaces strictes
+- Animations fluides avec Framer Motion
+- Design responsive et moderne
+- Pas de persistance de données (reset à chaque refresh)

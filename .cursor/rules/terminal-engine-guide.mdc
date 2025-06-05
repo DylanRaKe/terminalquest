@@ -1,0 +1,110 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Terminal Engine - Guide de Développement
+
+## Vue d'ensemble
+Le [terminalEngine.ts](mdc:app/lib/terminalEngine.ts) simule un terminal Linux authentique avec toutes les commandes de base et la gestion des erreurs réalistes.
+
+## Commandes Implémentées
+
+### Navigation
+- `ls` - Liste le contenu avec support des sous-locations (village/maison/boutique)
+- `cd` - Change de répertoire avec gestion des chemins relatifs (.., ~)
+- `pwd` - Affiche le répertoire actuel
+
+### Gestion de Fichiers
+- `cat` - Affiche le contenu des fichiers avec gestion d'erreurs
+- `mkdir` - Crée des répertoires (simulation)
+- `touch` - Crée des fichiers vides (simulation)
+- `cp` - Copie des fichiers (simulation)
+- `mv` - Déplace/renomme des fichiers (simulation)
+- `rm` - Supprime des fichiers (simulation)
+
+### Contenu et Recherche
+- `grep` - Recherche dans les fichiers
+- `help` - Affiche les commandes disponibles
+
+### Système
+- `chmod` - Change les permissions (simulation)
+- `clear` - Efface l'écran du terminal
+
+## Fonctionnalités Avancées
+
+### Autocomplétion
+Le terminal supporte l'autocomplétion TAB pour :
+- Noms de commandes
+- Noms de fichiers dans le contexte actuel
+- Noms de répertoires pour la commande `cd`
+- Navigation avec flèches dans les suggestions
+
+### Gestion des Erreurs
+Messages d'erreur authentiques Linux :
+```bash
+cat: missing operand
+cd: No such file or directory
+rm: cannot remove 'file': No such file or directory
+```
+
+### Contexte de Jeu
+- Support des sous-locations (village principal, maison, boutique)
+- Contenu contextuel basé sur la location actuelle
+- Déblocage progressif de commandes via exploration
+- Intégration avec le système de progression du jeu
+
+## Structure des Données
+
+### Locations
+Chaque location contient :
+- `files` - Fichiers disponibles avec leur contenu
+- `directories` - Répertoires navigables
+- `treasures` - Commandes à débloquer
+- `description` - Description narrative
+
+### Réponses Terminal
+Interface `TerminalResponse` :
+- `output` - Texte affiché à l'utilisateur
+- `success` - Succès/échec de la commande
+- `commandUsed` - Commande utilisée (pour les stats)
+- `treasureUnlocked` - Nouvelles commandes débloquées
+- `locationChanged` - Changement de location
+
+## Intégration avec l'Interface
+
+### Terminal Component
+Le [Terminal.tsx](mdc:app/components/Terminal.tsx) utilise React Hook Form et gère :
+- Historique des commandes (flèches haut/bas)
+- Autocomplétion avec TAB
+- Affichage des suggestions
+- Scroll automatique
+
+### Game Interface
+Le [GameInterface.tsx](mdc:app/components/GameInterface.tsx) coordonne :
+- Mise à jour du moteur lors des changements de location
+- Gestion des sous-locations via `setSubLocation()`
+- Synchronisation avec le store Zustand
+- Affichage des messages NPC
+
+## Bonnes Pratiques
+
+### Ajout de Nouvelles Commandes
+1. Ajouter la commande dans `executeCommand()`
+2. Implémenter la logique dans une méthode dédiée
+3. Retourner une `TerminalResponse` appropriée
+4. Ajouter la documentation dans [CLIDocumentation.tsx](mdc:app/components/CLIDocumentation.tsx)
+
+### Messages d'Erreur
+Toujours utiliser le format Linux standard :
+```typescript
+return { 
+  output: 'command: error message', 
+  success: false 
+}
+```
+
+### Gestion des Chemins
+- Supporter les chemins relatifs (.., .)
+- Valider l'existence des fichiers/répertoires
+- Maintenir la cohérence avec le système de locations du jeu

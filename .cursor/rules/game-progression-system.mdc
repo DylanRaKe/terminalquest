@@ -1,0 +1,140 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Système de Progression du Jeu
+
+## Vue d'ensemble
+CLIearn utilise un système de progression basé sur l'exploration et l'utilisation de commandes, géré par [gameStore.ts](mdc:app/stores/gameStore.ts) avec Zustand.
+
+## État du Jeu (Store Zustand)
+
+### Propriétés Principales
+- `playerName` - Nom du joueur
+- `currentLocation` - Location actuelle (village, maison, boutique)
+- `currentPath` - Chemin actuel dans le système de fichiers
+- `unlockedCommands` - Commandes débloquées par le joueur
+- `commandUsage` - Statistiques d'utilisation des commandes
+- `gameCompleted` - État de completion du jeu
+- `timeStarted` - Timestamp de début de partie
+
+### Actions Disponibles
+- `startGame()` - Initialise une nouvelle partie
+- `setCurrentLocation()` - Change de location
+- `setCurrentPath()` - Met à jour le chemin actuel
+- `unlockCommand()` - Débloque une nouvelle commande
+- `useCommand()` - Enregistre l'utilisation d'une commande
+- `addToHistory()` - Ajoute une entrée à l'historique
+- `completeGame()` - Marque le jeu comme terminé
+
+## Système de Locations
+
+### Structure des Locations
+Chaque location dans `locations` contient :
+- `id` - Identifiant unique
+- `name` - Nom affiché
+- `description` - Description narrative
+- `files` - Fichiers disponibles avec contenu
+- `directories` - Sous-répertoires navigables
+- `treasures` - Commandes à débloquer
+- `unlocked` - État de déblocage
+
+### Locations Disponibles
+
+#### Village Principal
+- **Fichiers** : `bienvenue.txt`, `guide.txt`, `carte.txt`
+- **Répertoires** : `maison/`, `boutique/`
+- **Commandes débloquées** : `ls`, `cat`, `cd`
+
+#### Maison
+- **Fichiers** : `journal.txt`, `lettre_maman.txt`, `recettes.txt`, `photo_famille.txt`
+- **Répertoires** : `chambre/`, `cuisine/`, `salon/`
+- **Commandes débloquées** : `mkdir`, `touch`
+
+#### Boutique
+- **Fichiers** : `inventaire.txt`, `commandes.txt`, `certifications.txt`
+- **Répertoires** : `atelier/`, `stockage/`, `vitrine/`
+- **Commandes débloquées** : `cp`, `mv`, `rm`
+
+## Mécaniques de Progression
+
+### Déblocage de Commandes
+1. **Exploration** : Utiliser `cd` pour accéder aux nouvelles locations
+2. **Lecture** : Utiliser `cat` sur des fichiers spéciaux
+3. **Découverte** : Certains fichiers contiennent des "trésors" (nouvelles commandes)
+
+### Système de Sous-Locations
+- Navigation avec `cd` dans les répertoires (chambre/, cuisine/, etc.)
+- Contenu contextuel via `handleSubLocationLs()` dans [terminalEngine.ts](mdc:app/lib/terminalEngine.ts)
+- Mise à jour automatique du moteur terminal
+
+### Completion du Jeu
+- Objectif : Débloquer toutes les commandes essentielles
+- Trésor final : Commande "master" qui termine le jeu
+- Affichage d'une modale de victoire
+
+## Intégration avec l'Interface
+
+### GameInterface Component
+Le [GameInterface.tsx](mdc:app/components/GameInterface.tsx) coordonne :
+- Initialisation du `TerminalEngine` basé sur la location
+- Gestion des changements de location/sous-location
+- Affichage des messages NPC contextuels
+- Synchronisation avec le store
+
+### Terminal Integration
+- Exécution des commandes via `handleCommandExecution()`
+- Mise à jour automatique des statistiques
+- Déblocage de commandes basé sur les réponses du terminal
+- Gestion des changements de location
+
+### UI Components
+
+#### PlayerStats
+Affiche dans [PlayerStats.tsx](mdc:app/components/PlayerStats.tsx) :
+- Nombre de commandes débloquées
+- Temps de jeu écoulé
+- Location actuelle
+
+#### CommandInventory
+Liste dans [CommandInventory.tsx](mdc:app/components/CommandInventory.tsx) :
+- Commandes disponibles avec icônes
+- Statistiques d'utilisation
+- Progression visuelle
+
+#### GameMap
+Visualise dans [GameMap.tsx](mdc:app/components/GameMap.tsx) :
+- Locations disponibles
+- Progression du joueur
+- Navigation interactive
+
+## Persistance et Reset
+
+### Pas de Persistance
+- **Choix de design** : Pas de localStorage
+- **Comportement** : Reset complet à chaque refresh
+- **Avantage** : Expérience fraîche à chaque session
+
+### Gestion des Sessions
+- `timeStarted` pour calculer la durée
+- État complet en mémoire uniquement
+- Possibilité de rejouer facilement
+
+## Extensibilité
+
+### Ajout de Nouvelles Locations
+1. Ajouter dans le tableau `locations` du store
+2. Créer les fichiers et répertoires associés
+3. Définir les commandes à débloquer
+4. Mettre à jour la carte et la navigation
+
+### Nouvelles Mécaniques
+- **Achievements** : Système extensible via le store
+- **Défis** : Utilisation spécifique de commandes
+- **Progression non-linéaire** : Déblocage conditionnel
+
+### Intégration Documentation
+- Lien automatique entre commandes débloquées et [CLIDocumentation.tsx](mdc:app/components/CLIDocumentation.tsx)
+- Suggestions contextuelles basées sur la progression
+- Aide adaptative selon le niveau du joueur

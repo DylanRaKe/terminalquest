@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Pages principales
+Allow: /
+Allow: /quiz
+Allow: /docs
+Allow: /game
+
+# Sitemap
+Sitemap: https://terminalquest.com/sitemap.xml
+
+# Optimisation pour les moteurs de recherche
+Crawl-delay: 1 

@@ -1,0 +1,147 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Système de Documentation CLI
+
+## Vue d'ensemble
+Le [CLIDocumentation.tsx](mdc:app/components/CLIDocumentation.tsx) fournit une documentation complète et interactive des commandes Linux avec recherche et exemples authentiques.
+
+## Structure des Commandes
+
+### Interface Command
+Chaque commande documentée contient :
+- `id` - Identifiant unique
+- `name` - Nom de la commande
+- `icon` - Icône Lucide React
+- `description` - Description en français
+- `syntax` - Syntaxe de la commande
+- `examples` - Exemples d'utilisation simples
+- `terminalExamples` - Exemples avec outputs authentiques
+- `options` - Options courantes avec descriptions
+- `notes` - Notes importantes et conseils
+- `category` - Catégorie de classification
+
+## Catégories Disponibles
+
+### Navigation
+- `ls`, `cd`, `pwd` - Commandes de navigation de base
+- Couleur : bleu à cyan
+
+### Gestion de Fichiers
+- `mkdir`, `touch`, `cp`, `mv`, `rm` - Manipulation de fichiers
+- Couleur : vert à émeraude
+
+### Contenu
+- `cat`, `grep` - Lecture et recherche dans les fichiers
+- Couleur : violet à pourpre
+
+### Système
+- `chmod`, `wget`, `curl`, `./script.sh` - Commandes système
+- Couleur : orange à rouge
+
+### Concepts de Base
+- `Pipes |`, `Wildcards *?`, `Chemins` - Concepts fondamentaux
+- Couleur : rose à rose foncé
+
+## Fonctionnalités Interactives
+
+### Barre de Recherche
+- Recherche en temps réel dans :
+  - Noms de commandes
+  - Descriptions
+  - Notes importantes
+- Filtrage automatique des résultats
+- Interface responsive avec icône
+
+### Filtrage par Catégorie
+- Boutons de filtrage colorés par catégorie
+- Combinaison recherche + catégorie
+- Bouton "Toutes les Commandes" pour reset
+
+### Modales Détaillées
+Chaque commande ouvre une modale avec :
+- **En-tête** : Icône, nom, catégorie
+- **Description** : Explication détaillée
+- **Syntaxe** : Format de la commande
+- **Exemples** : Utilisations courantes
+- **Exemples Terminal** : Sessions complètes avec outputs
+- **Options** : Flags et paramètres
+- **Notes** : Conseils et avertissements
+
+## Exemples Terminal Authentiques
+
+### Format des Exemples
+```typescript
+terminalExamples: [
+  {
+    command: 'ls -la',
+    output: 'total 24\ndrwxr-xr-x 2 user user 4096...'
+  }
+]
+```
+
+### Rendu Visuel
+- **Header** : "Session Terminal"
+- **Commandes** : Prompt `$` + commande en vert
+- **Outputs** : Texte gris avec formatage préservé
+- **Chemins** : Affichage en bleu pour les paths
+
+## Intégration avec le Jeu
+
+### Accès depuis l'Interface
+- Lien "📚 Documentation" dans l'en-tête du [GameInterface.tsx](mdc:app/components/GameInterface.tsx)
+- Ouverture dans un nouvel onglet
+- Route `/docs` via [docs/page.tsx](mdc:app/docs/page.tsx)
+
+### Cohérence Visuelle
+- Même palette de couleurs que le jeu
+- Animations Framer Motion cohérentes
+- Design responsive identique
+
+## Ajout de Nouvelles Commandes
+
+### Étapes Requises
+1. **Ajouter dans le tableau `commands`** :
+   ```typescript
+   {
+     id: 'nouvelle-commande',
+     name: 'command',
+     icon: <Icon className="w-5 h-5" />,
+     description: 'Description en français',
+     // ... autres propriétés
+   }
+   ```
+
+2. **Créer des exemples authentiques** :
+   - Tester la vraie commande sur Linux
+   - Copier les outputs exacts
+   - Inclure cas d'erreur typiques
+
+3. **Documenter les options importantes** :
+   - Flags les plus utilisés
+   - Descriptions claires en français
+
+4. **Ajouter des notes pratiques** :
+   - Conseils d'utilisation
+   - Avertissements de sécurité
+   - Bonnes pratiques
+
+### Bonnes Pratiques
+- **Descriptions** : Toujours en français, claires et concises
+- **Exemples** : Outputs authentiques Linux en anglais
+- **Options** : Se limiter aux plus courantes (max 5-6)
+- **Notes** : Inclure avertissements pour commandes dangereuses (rm, chmod)
+
+## Maintenance
+
+### Mise à Jour des Exemples
+- Vérifier périodiquement l'authenticité des outputs
+- Adapter aux versions récentes des commandes
+- Maintenir la cohérence des formats
+
+### Ajout de Catégories
+1. Modifier l'interface `Command['category']`
+2. Ajouter dans l'objet `categories`
+3. Choisir une palette de couleurs Tailwind appropriée
