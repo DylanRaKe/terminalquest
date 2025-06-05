@@ -4,7 +4,7 @@ import { forwardRef, HTMLAttributes } from 'react'
 import { motion, MotionProps } from 'framer-motion'
 import { useReducedMotion, useResponsive } from '../../hooks/useResponsive'
 
-export interface CardProps extends HTMLAttributes<HTMLDivElement> {
+export interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onDrag' | 'onDragStart' | 'onDragEnd' | 'onDragEnter' | 'onDragExit' | 'onDragLeave' | 'onDragOver' | 'onDrop' | 'onAnimationStart' | 'onAnimationEnd' | 'onAnimationIteration'> {
   variant?: 'default' | 'elevated' | 'outlined' | 'ghost'
   padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
   interactive?: boolean

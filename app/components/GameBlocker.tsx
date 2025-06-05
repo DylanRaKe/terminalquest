@@ -30,7 +30,7 @@ export function GameBlocker() {
           className="mb-8"
         >
           <p className="text-xl text-gray-300 mb-4">
-            Le jeu est actuellement en maintenance pour améliorer votre expérience d'apprentissage.
+            Le jeu est actuellement en maintenance pour améliorer votre expérience d&apos;apprentissage.
           </p>
           <p className="text-gray-400">
             En attendant, vous pouvez continuer à apprendre avec nos autres ressources !

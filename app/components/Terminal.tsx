@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { useGameStore } from '../stores/gameStore'
@@ -26,7 +26,7 @@ export function Terminal({ onCommandExecute }: TerminalProps) {
   const commandValue = watch('command', '')
 
   // Get autocomplete suggestions based on current input
-  const getAutocompleteSuggestions = (input: string): string[] => {
+  const getAutocompleteSuggestions = useCallback((input: string): string[] => {
     const [command, ...args] = input.split(' ')
     const currentLocationData = locations.find(loc => loc.id === currentLocation)
     
@@ -67,7 +67,7 @@ export function Terminal({ onCommandExecute }: TerminalProps) {
         }
         return []
     }
-  }
+  }, [locations, currentLocation, unlockedCommands])
 
   // Update suggestions when command changes
   useEffect(() => {
@@ -79,7 +79,7 @@ export function Terminal({ onCommandExecute }: TerminalProps) {
       setSuggestions([])
       setSelectedSuggestion(-1)
     }
-  }, [commandValue, currentLocation, unlockedCommands])
+  }, [commandValue, currentLocation, unlockedCommands, locations, getAutocompleteSuggestions])
 
   // Auto-scroll to bottom when new output is added
   useEffect(() => {

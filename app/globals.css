@@ -170,6 +170,15 @@ html {
   .card-padding {
     padding: 1rem;
   }
+  
+  /* Amélioration du responsive mobile */
+  .mobile-text-responsive {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+  }
+  
+  .mobile-title-responsive {
+    font-size: clamp(1.5rem, 8vw, 3rem);
+  }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
@@ -191,6 +200,18 @@ html {
   
   .card-padding {
     padding: 2rem;
+  }
+}
+
+/* Amélioration du responsive pour les panneaux */
+@media (max-width: 768px) {
+  .accessibility-panel {
+    max-height: 90vh !important;
+    border-radius: 1rem 1rem 0 0 !important;
+  }
+  
+  .accessibility-content {
+    padding-bottom: env(safe-area-inset-bottom, 1rem) !important;
   }
 }
 

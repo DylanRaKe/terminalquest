@@ -143,19 +143,19 @@ export class SandboxEngine {
         case 'cat':
           return this.handleCat(args)
         case 'mkdir':
-          return this.handleMkdir(args)
+          return this.handleMkdir()
         case 'touch':
-          return this.handleTouch(args)
+          return this.handleTouch()
         case 'rm':
-          return this.handleRm(args)
+          return this.handleRm()
         case 'cp':
-          return this.handleCp(args)
+          return this.handleCp()
         case 'mv':
-          return this.handleMv(args)
+          return this.handleMv()
         case 'find':
-          return this.handleFind(args)
+          return this.handleFind()
         case 'grep':
-          return this.handleGrep(args)
+          return this.handleGrep()
         case 'echo':
           return this.handleEcho(args)
         case 'history':
@@ -447,7 +447,7 @@ export class SandboxEngine {
   }
 
   // Méthodes pour les commandes non encore implémentées
-  private handleMkdir(_args: string[]): SandboxResponse {
+  private handleMkdir(): SandboxResponse {
     return {
       output: ['mkdir: fonctionnalité en cours de développement'],
       commandValid: true,
@@ -456,7 +456,7 @@ export class SandboxEngine {
     }
   }
 
-  private handleTouch(_args: string[]): SandboxResponse {
+  private handleTouch(): SandboxResponse {
     return {
       output: ['touch: fonctionnalité en cours de développement'],
       commandValid: true,
@@ -465,7 +465,7 @@ export class SandboxEngine {
     }
   }
 
-  private handleRm(_args: string[]): SandboxResponse {
+  private handleRm(): SandboxResponse {
     return {
       output: ['rm: fonctionnalité en cours de développement'],
       commandValid: true,
@@ -474,7 +474,7 @@ export class SandboxEngine {
     }
   }
 
-  private handleCp(_args: string[]): SandboxResponse {
+  private handleCp(): SandboxResponse {
     return {
       output: ['cp: fonctionnalité en cours de développement'],
       commandValid: true,
@@ -483,7 +483,7 @@ export class SandboxEngine {
     }
   }
 
-  private handleMv(_args: string[]): SandboxResponse {
+  private handleMv(): SandboxResponse {
     return {
       output: ['mv: fonctionnalité en cours de développement'],
       commandValid: true,
@@ -492,7 +492,7 @@ export class SandboxEngine {
     }
   }
 
-  private handleFind(_args: string[]): SandboxResponse {
+  private handleFind(): SandboxResponse {
     return {
       output: ['find: fonctionnalité en cours de développement'],
       commandValid: true,
@@ -501,7 +501,7 @@ export class SandboxEngine {
     }
   }
 
-  private handleGrep(_args: string[]): SandboxResponse {
+  private handleGrep(): SandboxResponse {
     return {
       output: ['grep: fonctionnalité en cours de développement'],
       commandValid: true,

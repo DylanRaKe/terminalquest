@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { CheckCircle, XCircle, RotateCcw, BookOpen, Star, Zap, Flame, Crown, Award, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import { quizStorage, QuizStats } from '../lib/quizStorage'
-import { useProgressionStore } from '../stores/progressionStore'
+// import { useProgressionStore } from '../stores/progressionStore'
 
 interface QuizQuestion {
   id: number
@@ -531,7 +531,7 @@ export function QuizInterface() {
   const [quizStats, setQuizStats] = useState<QuizStats>({})
 
   const { register, handleSubmit, watch, reset } = useForm<QuizFormData>()
-  const { recordQuizResult } = useProgressionStore()
+  // const { recordQuizResult } = useProgressionStore() // XP désactivé
 
   // Charger les statistiques au montage du composant
   useEffect(() => {
@@ -597,8 +597,8 @@ export function QuizInterface() {
       })
       
       // Enregistrer le résultat pour les badges et XP
-      recordQuizResult(correctAnswers, currentQuestions.length, isPerfect)
-      console.log('recordQuizResult appelé')
+              // recordQuizResult(correctAnswers, currentQuestions.length, isPerfect) // XP désactivé
+        // console.log('recordQuizResult appelé')
     }
   }
 

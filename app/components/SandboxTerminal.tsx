@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { SandboxEngine, SandboxResponse } from '../lib/sandboxEngine'
-import { useResponsive, useTouchDevice, useReducedMotion } from '../hooks/useResponsive'
-import { VirtualKeyboard } from './VirtualKeyboard'
-import { Keyboard } from 'lucide-react'
-import { useProgressionStore } from '../stores/progressionStore'
+// import { useResponsive, useTouchDevice, useReducedMotion } from '../hooks/useResponsive'
+// import { VirtualKeyboard } from './VirtualKeyboard'
+// import { Keyboard } from 'lucide-react'
+// import { useProgressionStore } from '../stores/progressionStore'
 
 interface TerminalLine {
   type: 'command' | 'output' | 'error' | 'suggestion'
@@ -33,16 +33,16 @@ export function SandboxTerminal() {
   const [currentCommand, setCurrentCommand] = useState('')
   const [historyIndex, setHistoryIndex] = useState(-1)
   const [currentDirectory, setCurrentDirectory] = useState('/home/user')
-  const [showVirtualKeyboard, setShowVirtualKeyboard] = useState(false)
+  // const [showVirtualKeyboard, setShowVirtualKeyboard] = useState(false)
   
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   
-  // Hooks pour la responsivité et progression
-  const { isMobile, isTablet, windowSize } = useResponsive()
-  const { isTouchDevice } = useTouchDevice()
-  const { prefersReducedMotion } = useReducedMotion()
-  const { recordCommand } = useProgressionStore()
+  // Hooks pour la responsivité et progression (désactivés)
+  // const { isMobile, isTablet, windowSize } = useResponsive()
+  // const { isTouchDevice } = useTouchDevice()
+  // const { prefersReducedMotion } = useReducedMotion()
+  // const { recordCommand } = useProgressionStore() // XP désactivé
 
   useEffect(() => {
     // Auto-focus sur l'input
@@ -77,7 +77,7 @@ export function SandboxTerminal() {
     // Enregistrer la commande pour la progression
     const commandName = command.split(' ')[0]
     console.log('Commande exécutée:', commandName, 'Valide:', response.commandValid)
-    recordCommand(commandName, response.commandValid)
+            // recordCommand(commandName, response.commandValid) // XP désactivé
 
     // Gérer la commande clear
     if (response.output.includes('CLEAR_TERMINAL')) {
@@ -257,7 +257,7 @@ export function SandboxTerminal() {
       {/* Terminal Footer */}
       <div className="bg-gray-800 rounded-b-lg px-4 py-2 border-t border-gray-700">
         <div className="flex justify-between items-center text-xs text-gray-400">
-          <span>Utilisez ↑↓ pour l'historique, Tab pour l'auto-complétion</span>
+          <span>Utilisez ↑↓ pour l&apos;historique, Tab pour l&apos;auto-complétion</span>
           <span>{currentDirectory}</span>
         </div>
       </div>

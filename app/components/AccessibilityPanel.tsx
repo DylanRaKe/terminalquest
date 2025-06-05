@@ -83,19 +83,33 @@ export function AccessibilityPanel() {
 
             {/* Panneau */}
             <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
+              initial={isMobile ? { y: '100%' } : { x: '100%' }}
+              animate={isMobile ? { y: 0 } : { x: 0 }}
+              exit={isMobile ? { y: '100%' } : { x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className={`fixed top-0 right-0 h-full bg-gray-900 border-l border-gray-700 z-50 overflow-y-auto ${
-                isMobile ? 'w-full' : 'w-96'
+              className={`fixed bg-gray-900 border-gray-700 z-50 overflow-y-auto ${
+                isMobile 
+                  ? 'bottom-0 left-0 right-0 h-[90vh] rounded-t-2xl border-t' 
+                  : 'top-0 right-0 h-full w-96 border-l'
               }`}
+              style={isMobile ? { maxHeight: '90vh' } : {}}
             >
+              {/* Barre de glissement mobile */}
+              {isMobile && (
+                <div className="flex justify-center pt-2 pb-1">
+                  <div className="w-12 h-1 bg-gray-600 rounded-full" />
+                </div>
+              )}
+              
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-700">
+              <div className={`flex items-center justify-between border-b border-gray-700 ${
+                isMobile ? 'p-4' : 'p-6'
+              }`}>
                 <div className="flex items-center gap-3">
                   <Settings className="w-6 h-6 text-blue-400" />
-                  <h2 className="text-xl font-bold text-white">Accessibilité</h2>
+                  <h2 className={`font-bold text-white ${
+                    isMobile ? 'text-lg' : 'text-xl'
+                  }`}>Accessibilité</h2>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
@@ -107,14 +121,18 @@ export function AccessibilityPanel() {
               </div>
 
               {/* Contenu */}
-              <div className="p-6 space-y-6">
+              <div className={`space-y-6 ${
+                isMobile ? 'p-4 pb-8' : 'p-6'
+              }`}>
                 {/* Taille de police */}
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                     <Type className="w-5 h-5 text-blue-400" />
                     Taille de police
                   </h3>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className={`grid gap-2 ${
+                    isMobile ? 'grid-cols-1' : 'grid-cols-2'
+                  }`}>
                     {fontSizeOptions.map((option) => (
                       <button
                         key={option.value}
@@ -138,7 +156,9 @@ export function AccessibilityPanel() {
                     <Contrast className="w-5 h-5 text-blue-400" />
                     Contraste
                   </h3>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className={`grid gap-2 ${
+                    isMobile ? 'grid-cols-1' : 'grid-cols-2'
+                  }`}>
                     <button
                       onClick={() => updateSetting('contrast', 'normal')}
                       className={`p-3 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
