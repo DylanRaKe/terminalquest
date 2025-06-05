@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "./components/Navigation";
 import { StructuredData } from "./components/StructuredData";
+import { AccessibilityProvider } from "./components/AccessibilityProvider";
+import { AccessibilityPanel } from "./components/AccessibilityPanel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,10 +69,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
       >
-        <div className="min-h-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-          <Navigation />
-          {children}
-        </div>
+        <AccessibilityProvider>
+          <div className="min-h-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+            <Navigation />
+            {children}
+            <AccessibilityPanel />
+          </div>
+        </AccessibilityProvider>
       </body>
     </html>
   );

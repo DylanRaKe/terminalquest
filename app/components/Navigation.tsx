@@ -1,21 +1,28 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, GamepadIcon, BookOpen, Brain, Menu, X, Lock } from 'lucide-react'
+import { Home, GamepadIcon, BookOpen, Brain, Menu, X, Lock, Target } from 'lucide-react'
 import { useDebugMode } from '../hooks/useDebugMode'
 import { Logo } from './Logo'
+import { useKeyboardNavigation, useFocusManagement } from '../hooks/useKeyboardNavigation'
+import { useResponsive } from '../hooks/useResponsive'
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
+  const [focusedIndex, setFocusedIndex] = useState(-1)
   const pathname = usePathname()
   const isDebugMode = useDebugMode()
+  const { isMobile, isTablet } = useResponsive()
+  const { trapFocus } = useFocusManagement()
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
 
   const navItems = [
     { href: '/', label: 'Accueil', icon: Home },
     { href: '/game', label: 'Jeu', icon: GamepadIcon },
+    { href: '/training', label: 'Entraînement', icon: Target },
     { href: '/docs', label: 'Documentation', icon: BookOpen },
     { href: '/quiz', label: 'Quiz', icon: Brain },
   ]

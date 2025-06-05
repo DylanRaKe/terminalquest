@@ -3,6 +3,7 @@ Allow: /
 
 # Pages principales
 Allow: /
+Allow: /training
 Allow: /quiz
 Allow: /docs
 Allow: /game

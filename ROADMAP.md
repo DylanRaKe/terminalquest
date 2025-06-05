@@ -9,10 +9,10 @@
 - [ ] Certificats de réussite téléchargeables
 
 ### 2. **Mode Entraînement Libre**
-- [ ] Terminal sandbox pour pratiquer librement
-- [ ] Validation en temps réel des commandes
-- [ ] Suggestions intelligentes
-- [ ] Historique des commandes tapées
+- [x] Terminal sandbox pour pratiquer librement
+- [x] Validation en temps réel des commandes
+- [x] Suggestions intelligentes
+- [x] Historique des commandes tapées
 
 ### 3. **Tutoriels Interactifs Guidés**
 - [ ] Parcours d'apprentissage structurés par thème
@@ -111,16 +111,16 @@
 ## 🎨 UX/UI Avancées
 
 ### 17. **Accessibilité Renforcée**
-- [ ] Support lecteurs d'écran
-- [ ] Navigation clavier complète
-- [ ] Contrastes ajustables
-- [ ] Tailles de police variables
+- [x] Support lecteurs d'écran
+- [x] Navigation clavier complète
+- [x] Contrastes ajustables
+- [x] Tailles de police variables
 
 ### 18. **Mobile-First Amélioré**
-- [ ] Clavier virtuel CLI optimisé
-- [ ] Gestes tactiles intuitifs
-- [ ] Interface adaptative
-- [ ] Mode portrait/paysage
+- [x] Clavier virtuel CLI optimisé
+- [x] Gestes tactiles intuitifs
+- [x] Interface adaptative
+- [x] Mode portrait/paysage
 
 ---
 

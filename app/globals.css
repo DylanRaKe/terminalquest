@@ -109,3 +109,120 @@ body {
 .location-pulse {
   animation: location-pulse 2s ease-in-out infinite;
 }
+
+/* Styles d'accessibilité */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.focus-visible *:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.high-contrast {
+  --bg-primary: #000000;
+  --text-primary: #ffffff;
+  --border-color: #ffffff;
+}
+
+.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.keyboard-navigation button:focus,
+.keyboard-navigation a:focus,
+.keyboard-navigation input:focus,
+.keyboard-navigation textarea:focus,
+.keyboard-navigation select:focus {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Tailles de police responsive */
+html {
+  font-size: var(--base-font-size, 16px);
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: calc(var(--base-font-size, 16px) * 0.9);
+  }
+}
+
+/* Styles responsive pour les cartes */
+@media (max-width: 640px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .card-padding {
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .card-padding {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .card-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  
+  .card-padding {
+    padding: 2rem;
+  }
+}
+
+/* Amélioration du contraste pour l'accessibilité */
+.high-contrast .bg-black\/50 {
+  background-color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+.high-contrast .text-gray-400 {
+  color: #ffffff !important;
+}
+
+.high-contrast .text-gray-300 {
+  color: #ffffff !important;
+}
+
+/* Focus amélioré pour la navigation clavier */
+.keyboard-navigation *:focus {
+  outline: 3px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+}
+
+/* Animations réduites */
+.reduce-motion .animate-gradient,
+.reduce-motion .terminal-cursor,
+.reduce-motion .location-pulse {
+  animation: none !important;
+}
+
+.reduce-motion * {
+  transition: none !important;
+  animation: none !important;
+}

@@ -5,9 +5,58 @@ import Link from 'next/link'
 import { GamepadIcon, BookOpen, Brain, Trophy, Clock, Target, Lock } from 'lucide-react'
 import { useDebugMode } from '../hooks/useDebugMode'
 import { Logo } from './Logo'
+import { useResponsive } from '../hooks/useResponsive'
+import { useKeyboardNavigation } from '../hooks/useKeyboardNavigation'
+import { useState, useRef, useEffect, useCallback } from 'react'
 
 export function MainInterface() {
   const isDebugMode = useDebugMode()
+  const { isMobile, isTablet } = useResponsive()
+  const [focusedCardIndex, setFocusedCardIndex] = useState(-1)
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+  
+  const cards = [
+    { id: 'game', href: '/game', available: isDebugMode },
+    { id: 'training', href: '/training', available: true },
+    { id: 'docs', href: '/docs', available: true },
+    { id: 'quiz', href: '/quiz', available: true }
+  ]
+
+  const navigateLeft = useCallback(() => {
+    setFocusedCardIndex(prev => {
+      const newIndex = prev <= 0 ? cards.length - 1 : prev - 1
+      cardRefs.current[newIndex]?.focus()
+      return newIndex
+    })
+  }, [cards.length])
+
+  const navigateRight = useCallback(() => {
+    setFocusedCardIndex(prev => {
+      const newIndex = prev >= cards.length - 1 ? 0 : prev + 1
+      cardRefs.current[newIndex]?.focus()
+      return newIndex
+    })
+  }, [cards.length])
+
+  const selectCard = useCallback(() => {
+    if (focusedCardIndex >= 0 && cards[focusedCardIndex].available) {
+      window.location.href = cards[focusedCardIndex].href
+    }
+  }, [focusedCardIndex, cards])
+
+  useKeyboardNavigation({
+    onArrowLeft: navigateLeft,
+    onArrowRight: navigateRight,
+    onEnter: selectCard
+  })
+
+  useEffect(() => {
+    // Focus sur la première carte disponible au chargement
+    const firstAvailableIndex = cards.findIndex(card => card.available)
+    if (firstAvailableIndex >= 0) {
+      setFocusedCardIndex(firstAvailableIndex)
+    }
+  }, [isDebugMode])
   
   return (
     <div className="min-h-screen flex items-center justify-center p-4 pt-20">
@@ -54,7 +103,13 @@ export function MainInterface() {
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="grid md:grid-cols-3 gap-8 mb-8"
+          className={`grid gap-6 mb-8 ${
+            isMobile 
+              ? 'grid-cols-1' 
+              : isTablet 
+                ? 'grid-cols-2' 
+                : 'lg:grid-cols-4'
+          }`}
         >
           {/* Game Card */}
           <motion.div
@@ -121,6 +176,43 @@ export function MainInterface() {
                 </div>
               </div>
             )}
+          </motion.div>
+
+          {/* Training Card */}
+          <motion.div
+            whileHover={{ scale: 1.05, y: -10 }}
+            whileTap={{ scale: 0.95 }}
+            className="group"
+          >
+            <Link href="/training">
+              <div className="bg-black/50 backdrop-blur-lg rounded-2xl p-8 border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300 h-full cursor-pointer">
+                <div className="text-center">
+                  <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 group-hover:shadow-lg group-hover:shadow-blue-500/25 transition-all duration-300">
+                    <Target className="w-10 h-10 text-white" />
+                  </div>
+                  
+                  <h2 className="text-3xl font-bold text-white mb-4">🎯 Entraînement</h2>
+                  <p className="text-gray-400 mb-6 leading-relaxed">
+                    Pratiquez librement dans un terminal sandbox avec validation en temps réel et suggestions intelligentes.
+                  </p>
+                  
+                  <div className="space-y-2 text-sm text-gray-500">
+                    <div className="flex items-center justify-center gap-2">
+                      <Target className="w-4 h-4" />
+                      <span>Pratique libre</span>
+                    </div>
+                    <div className="flex items-center justify-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      <span>Feedback instantané</span>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-3 px-6 rounded-xl group-hover:from-blue-600 group-hover:to-cyan-600 transition-all duration-200">
+                    Commencer l'Entraînement
+                  </div>
+                </div>
+              </div>
+            </Link>
           </motion.div>
 
           {/* Documentation Card */}
