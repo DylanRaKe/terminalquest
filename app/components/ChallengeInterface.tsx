@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Trophy, 
@@ -15,7 +15,6 @@ import {
   Medal,
   Timer,
   Award,
-  Flame,
   Crown
 } from 'lucide-react';
 import { 
@@ -38,9 +37,7 @@ export const ChallengeInterface: React.FC<ChallengeInterfaceProps> = ({ onBack }
   
   const {
     currentChallenge,
-    completedChallenges,
     totalScore,
-    totalXP,
     badges,
     isCompleted,
     getBestScore,
