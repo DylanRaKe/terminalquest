@@ -31,28 +31,72 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ tutorial, onBack
     isStepCompleted,
     nextStep,
     previousStep,
-    getTutorialProgress
+    getTutorialProgress,
+    completeTutorial,
+    exitCurrentTutorial
   } = useTutorialStore();
 
   const [showHint, setShowHint] = useState(false);
+  const [validationMessage, setValidationMessage] = useState<string>('');
 
   const currentStep = getCurrentStep();
   const progress = getTutorialProgress(tutorial.id);
   const totalSteps = tutorial.steps.length;
   const completedStepsCount = progress?.completedSteps.length || 0;
-  const progressPercentage = (completedStepsCount / totalSteps) * 100;
+  const progressPercentage = ((currentStepIndex + (currentStep && isStepCompleted(currentStep.id) ? 1 : 0)) / totalSteps) * 100;
+
+  const handleCommandValidation = (isValid: boolean, command: string) => {
+    if (isValid) {
+      setValidationMessage('✅ Commande validée !');
+      setTimeout(() => setValidationMessage(''), 3000);
+    } else if (currentStep && command.trim() !== '') {
+      setValidationMessage('❌ Commande incorrecte. Essayez encore !');
+      setTimeout(() => setValidationMessage(''), 3000);
+    }
+  };
 
   useEffect(() => {
     setShowHint(false);
+    setValidationMessage('');
   }, [currentStepIndex]);
+
+  useEffect(() => {
+    // Vérifier si le tutoriel est terminé
+    if (currentStepIndex >= totalSteps) {
+      console.log('Tutoriel terminé, appel de completeTutorial()');
+      completeTutorial();
+    }
+  }, [currentStepIndex, totalSteps, completeTutorial]);
+
+  // Debug: afficher l'état actuel
+  useEffect(() => {
+    console.log('TutorialPlayer - État actuel:', {
+      tutorialId: tutorial.id,
+      currentStepIndex,
+      totalSteps,
+      currentStep: currentStep?.id,
+      isCompleted: currentStep ? isStepCompleted(currentStep.id) : false
+    });
+  }, [tutorial.id, currentStepIndex, totalSteps, currentStep, isStepCompleted]);
 
   const handlePreviousStep = () => {
     if (currentStepIndex > 0) {
       previousStep();
+    } else {
+      // Si on est à la première étape, retourner à la liste des tutoriels
+      exitCurrentTutorial();
+      onBack();
     }
   };
 
   const handleNextStep = () => {
+    // Vérifier que l'étape actuelle est complétée avant de passer à la suivante
+    if (currentStep && !isStepCompleted(currentStep.id)) {
+      setValidationMessage('⚠️ Vous devez d\'abord compléter cette étape !');
+      setTimeout(() => setValidationMessage(''), 3000);
+      return;
+    }
+    
     if (currentStepIndex < totalSteps - 1) {
       nextStep();
     }
@@ -61,6 +105,17 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ tutorial, onBack
   const handleResetStep = () => {
     // Réinitialiser l'étape
     setShowHint(false);
+    setValidationMessage('');
+  };
+
+  const handleResetTutorial = () => {
+    if (confirm('Êtes-vous sûr de vouloir recommencer ce tutoriel depuis le début ?')) {
+      exitCurrentTutorial();
+      // Redémarrer le tutoriel
+      setTimeout(() => {
+        window.location.reload(); // Solution simple pour redémarrer proprement
+      }, 100);
+    }
   };
 
   const getLevelColor = (level: string) => {
@@ -68,6 +123,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ tutorial, onBack
       case 'beginner': return 'from-green-500 to-emerald-500';
       case 'intermediate': return 'from-blue-500 to-cyan-500';
       case 'advanced': return 'from-purple-500 to-pink-500';
+      case 'expert': return 'from-red-500 to-orange-500';
       default: return 'from-gray-500 to-gray-600';
     }
   };
@@ -113,8 +169,12 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ tutorial, onBack
         >
           <div className="flex items-center gap-4">
             <button
-              onClick={onBack}
+              onClick={() => {
+                exitCurrentTutorial();
+                onBack();
+              }}
               className="p-2 rounded-xl bg-black/20 hover:bg-black/30 transition-colors"
+              title="Retour à la liste des tutoriels"
             >
               <ArrowLeft className="w-6 h-6 text-white" />
             </button>
@@ -127,12 +187,21 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ tutorial, onBack
             </div>
           </div>
           
-          <div className="text-right">
-            <div className="text-xl font-bold text-white">
-              Étape {currentStepIndex + 1}/{totalSteps}
-            </div>
-            <div className="text-sm text-gray-400">
-              {completedStepsCount} complétées
+          <div className="text-right flex items-center gap-4">
+            <button
+              onClick={handleResetTutorial}
+              className="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors text-sm"
+              title="Recommencer ce tutoriel"
+            >
+              🔄 Recommencer
+            </button>
+            <div>
+              <div className="text-xl font-bold text-white">
+                Étape {currentStepIndex + 1}/{totalSteps}
+              </div>
+              <div className="text-sm text-gray-400">
+                {completedStepsCount} complétées
+              </div>
             </div>
           </div>
         </motion.div>
@@ -217,8 +286,35 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ tutorial, onBack
                   )}
                 </AnimatePresence>
 
+                {/* Message de validation */}
+                {validationMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className={`border rounded-lg p-4 mb-4 ${
+                      validationMessage.includes('✅') 
+                        ? 'bg-green-500/10 border-green-500/30' 
+                        : 'bg-red-500/10 border-red-500/30'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      {validationMessage.includes('✅') ? (
+                        <CheckCircle className="w-5 h-5 text-green-400" />
+                      ) : (
+                        <Circle className="w-5 h-5 text-red-400" />
+                      )}
+                      <span className={`font-semibold ${
+                        validationMessage.includes('✅') ? 'text-green-200' : 'text-red-200'
+                      }`}>
+                        {validationMessage}
+                      </span>
+                    </div>
+                  </motion.div>
+                )}
+
                 {/* Validation de l'étape */}
-                {isStepCompleted(currentStep.id) && (
+                {isStepCompleted(currentStep.id) && !validationMessage && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -236,11 +332,10 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ tutorial, onBack
               <div className="flex gap-2">
                 <button
                   onClick={handlePreviousStep}
-                  disabled={currentStepIndex === 0}
-                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Précédent
+                  {currentStepIndex === 0 ? 'Retour' : 'Précédent'}
                 </button>
                 
                 <button
@@ -253,10 +348,10 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ tutorial, onBack
                 
                 <button
                   onClick={handleNextStep}
-                  disabled={currentStepIndex === totalSteps - 1}
+                  disabled={currentStepIndex === totalSteps - 1 || (currentStep && !isStepCompleted(currentStep.id))}
                   className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-800 disabled:text-gray-500 text-white rounded-lg transition-colors"
                 >
-                  Suivant
+                  {currentStep && !isStepCompleted(currentStep.id) ? 'Complétez l\'étape' : 'Suivant'}
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -314,7 +409,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ tutorial, onBack
                 </div>
               </div>
               
-                             <SandboxTerminal />
+                             <SandboxTerminal onCommandValidated={handleCommandValidation} />
             </div>
           </motion.div>
         </div>

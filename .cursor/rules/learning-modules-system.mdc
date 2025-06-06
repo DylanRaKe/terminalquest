@@ -1,0 +1,215 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# TerminalQuest - Système des Modules d'Apprentissage
+
+## Vue d'ensemble
+TerminalQuest propose plusieurs modules d'apprentissage complémentaires pour maîtriser les commandes CLI : tutoriels interactifs, défis pratiques, quiz adaptatifs, glossaire complet, et système de jeu immersif.
+
+## Modules Principaux
+
+### Module Tutoriels
+- [TutorialInterface.tsx](mdc:app/components/TutorialInterface.tsx) - Interface principale des tutoriels
+- [TutorialPlayer.tsx](mdc:app/components/TutorialPlayer.tsx) - Lecteur de tutoriels interactifs
+- [tutorialStore.ts](mdc:app/stores/tutorialStore.ts) - Gestion d'état des tutoriels
+- [tutorials.ts](mdc:app/lib/tutorials.ts) - Base de données des tutoriels (1141 lignes)
+
+**Fonctionnalités**:
+- Tutoriels pas-à-pas avec validation automatique
+- Progression sauvegardée avec localStorage
+- Système d'indices et d'aide contextuelle
+- Intégration terminal pour pratique en temps réel
+
+### Module Défis
+- [ChallengeInterface.tsx](mdc:app/components/ChallengeInterface.tsx) - Interface des défis
+- [ChallengePlayer.tsx](mdc:app/components/ChallengePlayer.tsx) - Lecteur de défis
+- [challengeStore.ts](mdc:app/stores/challengeStore.ts) - Gestion d'état des défis
+- [challenges.ts](mdc:app/lib/challenges.ts) - Base de données des défis (301 lignes)
+
+**Fonctionnalités**:
+- Défis pratiques avec objectifs clairs
+- Système de scoring et évaluation
+- Niveaux de difficulté progressifs
+- Validation automatique des solutions
+
+### Module Quiz
+- [QuizInterface.tsx](mdc:app/components/QuizInterface.tsx) - Interface des quiz (976 lignes)
+- [quizStorage.ts](mdc:app/lib/quizStorage.ts) - Gestion des données quiz
+- **Fonctionnalités**:
+  - Quiz adaptatifs selon le niveau
+  - Questions à choix multiples et pratiques
+  - Système de scoring intelligent
+  - Révision des erreurs avec explications
+
+### Module Glossaire
+- [GlossaryInterface.tsx](mdc:app/components/GlossaryInterface.tsx) - Interface du glossaire (650 lignes)
+- [GlossaryStats.tsx](mdc:app/components/GlossaryStats.tsx) - Statistiques d'utilisation
+- [glossary.ts](mdc:app/lib/glossary.ts) - Base de données complète (1057 lignes)
+
+**Fonctionnalités**:
+- Documentation complète de 50+ commandes
+- Recherche floue avec Fuse.js
+- Catégorisation par domaines
+- Exemples pratiques avec terminal intégré
+- Statistiques d'apprentissage
+
+### Module Jeu Principal
+- [GameInterface.tsx](mdc:app/components/GameInterface.tsx) - Interface de jeu (288 lignes)
+- [GameMap.tsx](mdc:app/components/GameMap.tsx) - Carte interactive
+- [gameStore.ts](mdc:app/stores/gameStore.ts) - État du jeu
+- [NPCGuide.tsx](mdc:app/components/NPCGuide.tsx) - Guide NPC
+
+**Fonctionnalités**:
+- Aventure narrative immersive
+- Carte interactive façon RPG
+- Système de progression par lieux
+- Déblocage de commandes via exploration
+
+### Module Entraînement
+- [TrainingInterface.tsx](mdc:app/components/TrainingInterface.tsx) - Interface d'entraînement
+- **Fonctionnalités**:
+  - Mode libre pour pratique
+  - Exercices ciblés par commande
+  - Sandbox sécurisé pour expérimentation
+
+## Système de Progression
+
+### Gestion Globale
+- [progressionStore.ts](mdc:app/stores/progressionStore.ts) - Store principal (349 lignes)
+- [ProgressionProvider.tsx](mdc:app/components/ProgressionProvider.tsx) - Provider global
+- [ProgressionPanel.tsx](mdc:app/components/ProgressionPanel.tsx) - Interface de progression
+
+### Composants de Progression
+- [ProgressBar.tsx](mdc:app/components/ProgressBar.tsx) - Barres de progression
+- [PlayerStats.tsx](mdc:app/components/PlayerStats.tsx) - Statistiques joueur
+- [BadgeComponent.tsx](mdc:app/components/BadgeComponent.tsx) - Système de badges
+- [AchievementNotification.tsx](mdc:app/components/AchievementNotification.tsx) - Notifications
+
+### Métriques Suivies
+- **Commandes maîtrisées**: Nombre et pourcentage
+- **Temps d'apprentissage**: Par module et global
+- **Score de précision**: Basé sur les erreurs
+- **Streak d'utilisation**: Jours consécutifs
+- **Achievements débloqués**: Badges et récompenses
+
+## Contenu Pédagogique
+
+### Structure des Tutoriels
+```typescript
+interface Tutorial {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: 'débutant' | 'intermédiaire' | 'avancé';
+  estimatedTime: number;
+  prerequisites: string[];
+  steps: TutorialStep[];
+  commands: string[];
+}
+```
+
+### Structure des Défis
+```typescript
+interface Challenge {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: number;
+  objectives: string[];
+  hints: string[];
+  solution: string[];
+  validation: ValidationRule[];
+}
+```
+
+### Structure du Glossaire
+```typescript
+interface GlossaryEntry {
+  command: string;
+  category: string;
+  description: string;
+  syntax: string;
+  examples: Example[];
+  options: Option[];
+  relatedCommands: string[];
+  difficulty: string;
+}
+```
+
+## Système d'Évaluation
+
+### Critères d'Évaluation
+- **Précision**: Exactitude des commandes utilisées
+- **Efficacité**: Nombre minimal de commandes pour atteindre l'objectif
+- **Temps**: Vitesse d'exécution des tâches
+- **Compréhension**: Capacité à expliquer les actions
+
+### Scoring Adaptatif
+- **Bonus de vitesse**: Points supplémentaires pour rapidité
+- **Malus d'erreur**: Pénalités pour erreurs répétées
+- **Bonus de créativité**: Récompenses pour solutions alternatives
+- **Progression continue**: Ajustement selon le niveau
+
+## Personnalisation et Accessibilité
+
+### Adaptation au Niveau
+- **Débutant**: Interface simplifiée, plus d'aide
+- **Intermédiaire**: Fonctionnalités standard
+- **Avancé**: Défis complexes, moins d'assistance
+- **Expert**: Mode libre, défis personnalisés
+
+### Fonctionnalités d'Accessibilité
+- [AccessibilityProvider.tsx](mdc:app/components/AccessibilityProvider.tsx) - Provider d'accessibilité
+- [AccessibilityPanel.tsx](mdc:app/components/AccessibilityPanel.tsx) - Panneau de configuration
+- [VirtualKeyboard.tsx](mdc:app/components/VirtualKeyboard.tsx) - Clavier virtuel
+- **Support**: Lecteurs d'écran, navigation clavier, contrastes élevés
+
+## Intégration et Synchronisation
+
+### Communication Inter-Modules
+- **État partagé**: Zustand stores pour synchronisation
+- **Événements**: Système d'événements pour communication
+- **Persistance**: localStorage pour sauvegarde cross-module
+- **Analytics**: Suivi des interactions entre modules
+
+### Flux de Données
+1. **Apprentissage**: Tutoriels → Défis → Quiz → Jeu
+2. **Référence**: Glossaire accessible depuis tous les modules
+3. **Progression**: Mise à jour globale depuis chaque module
+4. **Achievements**: Déclenchement cross-module
+
+## Stratégies Pédagogiques
+
+### Apprentissage Progressif
+- **Scaffolding**: Support progressivement retiré
+- **Répétition espacée**: Révision automatique des concepts
+- **Apprentissage actif**: Pratique immédiate des concepts
+- **Feedback immédiat**: Correction en temps réel
+
+### Gamification
+- **Points et scores**: Système de récompenses
+- **Badges et achievements**: Reconnaissance des progrès
+- **Progression visuelle**: Barres et indicateurs
+- **Compétition**: Classements et défis
+
+### Adaptation Individuelle
+- **Diagnostic initial**: Évaluation du niveau
+- **Parcours personnalisé**: Adaptation du contenu
+- **Rythme individuel**: Progression à son propre rythme
+- **Révision ciblée**: Focus sur les points faibles
+
+## Métriques et Analytics
+
+### Données Collectées
+- **Temps par module**: Durée d'utilisation
+- **Taux de réussite**: Pourcentage de succès
+- **Erreurs communes**: Patterns d'erreurs
+- **Préférences**: Modules favoris
+
+### Utilisation des Données
+- **Amélioration continue**: Optimisation du contenu
+- **Personnalisation**: Adaptation aux besoins
+- **Détection de difficultés**: Identification des points bloquants
+- **Recommandations**: Suggestions de parcours

@@ -1,0 +1,159 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# TerminalQuest - Système de Moteur Terminal
+
+## Vue d'ensemble
+Le système de terminal de TerminalQuest simule un environnement Linux authentique avec des commandes réelles, un système de fichiers virtuel, et une expérience utilisateur complète.
+
+## Moteurs Principaux
+
+### Terminal Engine Principal
+- [terminalEngine.ts](mdc:app/lib/terminalEngine.ts) - Moteur principal avec simulation complète
+- **Fonctionnalités**: Commandes Linux authentiques, système de fichiers, historique
+- **Commandes supportées**: ls, cd, cat, mkdir, touch, cp, mv, rm, pwd, grep, chmod, wget, curl, find, head, tail, wc, sort, uniq
+
+### Sandbox Engine
+- [sandboxEngine.ts](mdc:app/lib/sandboxEngine.ts) - Moteur sandbox pour tests et expérimentation
+- **Fonctionnalités**: Environnement isolé, reset facile, mode apprentissage
+- **Usage**: Tutoriels, défis, tests utilisateur
+
+## Composants Terminal
+
+### Terminal Principal
+- [Terminal.tsx](mdc:app/components/Terminal.tsx) - Interface terminal complète
+- **Fonctionnalités**:
+  - Autocomplétion intelligente avec TAB
+  - Historique des commandes (flèches haut/bas)
+  - Navigation dans les suggestions (flèches gauche/droite)
+  - Coloration syntaxique avec Prism.js
+  - Messages d'erreur authentiques Linux
+
+### Sandbox Terminal
+- [SandboxTerminal.tsx](mdc:app/components/SandboxTerminal.tsx) - Terminal pour environnement de test
+- **Fonctionnalités**:
+  - Environnement isolé et réinitialisable
+  - Mode guidé pour tutoriels
+  - Validation des commandes en temps réel
+  - Feedback pédagogique adapté
+
+## Système de Fichiers Virtuel
+
+### Structure de Base
+```
+/
+├── home/
+│   └── user/
+│       ├── documents/
+│       ├── downloads/
+│       └── projects/
+├── etc/
+├── var/
+└── tmp/
+```
+
+### Gestion des Fichiers
+- **Création**: mkdir, touch avec validation des noms
+- **Navigation**: cd avec support des chemins relatifs/absolus
+- **Lecture**: cat, head, tail avec gestion des gros fichiers
+- **Manipulation**: cp, mv, rm avec confirmations de sécurité
+- **Recherche**: find, grep avec patterns et options
+
+## Commandes Implémentées
+
+### Navigation et Exploration
+- **ls**: Liste avec options (-l, -a, -h, --color)
+- **cd**: Navigation avec support ~, .., chemins absolus/relatifs
+- **pwd**: Affichage du répertoire courant
+- **find**: Recherche de fichiers avec patterns
+
+### Gestion de Fichiers
+- **cat**: Affichage de contenu avec numérotation de lignes
+- **head/tail**: Affichage partiel avec options -n
+- **mkdir**: Création de répertoires avec -p pour parents
+- **touch**: Création de fichiers avec gestion des timestamps
+- **cp**: Copie avec options -r pour récursif
+- **mv**: Déplacement/renommage avec validation
+- **rm**: Suppression avec confirmations et -r pour récursif
+
+### Traitement de Texte
+- **grep**: Recherche de patterns avec options -i, -n, -r
+- **sort**: Tri de lignes avec options diverses
+- **uniq**: Suppression des doublons
+- **wc**: Comptage de mots, lignes, caractères
+
+### Système et Permissions
+- **chmod**: Modification des permissions (notation octale et symbolique)
+- **wget/curl**: Simulation de téléchargements
+- **ps**: Affichage des processus (simulé)
+- **top**: Moniteur système (simulé)
+
+## Fonctionnalités Avancées
+
+### Autocomplétion Intelligente
+- **Fichiers et dossiers**: Complétion basée sur le système de fichiers
+- **Commandes**: Suggestions de commandes disponibles
+- **Options**: Complétion des flags et options de commandes
+- **Historique**: Recherche dans l'historique des commandes
+
+### Gestion d'Erreurs
+- **Messages authentiques**: Erreurs au format Linux standard
+- **Codes de retour**: Simulation des codes d'erreur Unix
+- **Suggestions**: Propositions de corrections pour les erreurs courantes
+- **Aide contextuelle**: Affichage d'aide pour les commandes mal utilisées
+
+### Historique et Navigation
+- **Persistance**: Sauvegarde de l'historique dans localStorage
+- **Navigation**: Flèches haut/bas pour parcourir l'historique
+- **Recherche**: Ctrl+R pour recherche inverse dans l'historique
+- **Édition**: Modification des commandes avant exécution
+
+## Intégration avec les Modules
+
+### Système de Jeu
+- **Progression**: Déblocage de commandes via exploration
+- **Validation**: Vérification des objectifs de jeu
+- **Feedback**: Messages contextuels selon la progression
+- **Achievements**: Déclenchement d'achievements sur certaines actions
+
+### Tutoriels et Défis
+- **Mode guidé**: Instructions pas-à-pas avec validation
+- **Vérification**: Contrôle automatique des commandes exécutées
+- **Indices**: Système d'aide progressive
+- **Évaluation**: Scoring basé sur l'efficacité et la précision
+
+### Glossaire et Documentation
+- **Référence**: Lien avec la documentation des commandes
+- **Exemples**: Intégration d'exemples pratiques
+- **Recherche**: Recherche de commandes depuis le terminal
+- **Aide**: Commande help intégrée avec documentation
+
+## Configuration et Personnalisation
+
+### Paramètres Terminal
+- **Thème**: Couleurs et apparence personnalisables
+- **Taille**: Police et dimensions ajustables
+- **Comportement**: Options d'autocomplétion et historique
+- **Accessibilité**: Support lecteurs d'écran et navigation clavier
+
+### Modes d'Utilisation
+- **Débutant**: Interface simplifiée avec plus d'aide
+- **Intermédiaire**: Fonctionnalités standard
+- **Expert**: Mode avancé avec toutes les options
+- **Sandbox**: Mode test sans conséquences
+
+## Sécurité et Limitations
+
+### Commandes Restreintes
+- **Système**: Pas d'accès aux commandes système dangereuses
+- **Réseau**: Simulation des commandes réseau sans accès réel
+- **Permissions**: Gestion simulée des permissions Unix
+- **Isolation**: Environnement complètement isolé du système hôte
+
+### Validation des Entrées
+- **Sanitisation**: Nettoyage des entrées utilisateur
+- **Validation**: Vérification de la syntaxe des commandes
+- **Limites**: Restrictions sur la taille des fichiers et commandes
+- **Timeout**: Limitation du temps d'exécution des commandes

@@ -19,6 +19,8 @@ export function MainInterface() {
   const cards = useMemo(() => [
     { id: 'game', href: '/game', available: isDebugMode },
     { id: 'training', href: '/training', available: true },
+    { id: 'tutorials', href: '/tutorials', available: true },
+    { id: 'challenges', href: '/challenges', available: true },
     { id: 'glossary', href: '/glossary', available: true },
     { id: 'quiz', href: '/quiz', available: true }
   ], [isDebugMode])
@@ -277,16 +279,61 @@ export function MainInterface() {
                   <div className="grid grid-cols-2 gap-3 mb-6">
                     <div className="bg-black/20 rounded-lg p-3 text-center">
                       <Target className="w-4 h-4 mx-auto mb-1 text-purple-400" />
-                      <span className="text-xs text-gray-300">3 niveaux</span>
+                      <span className="text-xs text-gray-300">4 niveaux</span>
                     </div>
                     <div className="bg-black/20 rounded-lg p-3 text-center">
                       <Clock className="w-4 h-4 mx-auto mb-1 text-pink-400" />
-                      <span className="text-xs text-gray-300">Guidé</span>
+                      <span className="text-xs text-gray-300">Validation auto</span>
                     </div>
                   </div>
                   
                   <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-3 px-6 rounded-xl text-center group-hover:from-purple-600 group-hover:to-pink-600 transition-all duration-200">
                     Commencer les Tutoriels
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* Challenges Card */}
+          <motion.div
+            whileHover={{ scale: 1.02, y: -5 }}
+            whileTap={{ scale: 0.98 }}
+            className="group relative"
+          >
+            <Link href="/challenges" className="block h-full">
+              <div className="relative bg-gradient-to-br from-yellow-900/80 to-orange-900/80 backdrop-blur-xl rounded-3xl p-8 border border-yellow-500/30 hover:border-yellow-400/60 transition-all duration-500 h-full cursor-pointer overflow-hidden">
+                {/* Effet de brillance */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl w-16 h-16 flex items-center justify-center group-hover:shadow-lg group-hover:shadow-yellow-500/25 transition-all duration-300">
+                      <Trophy className="w-8 h-8 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-white">🏆 Défis & Challenges</h2>
+                      <p className="text-yellow-300 text-sm">Compétition chronométrée</p>
+                    </div>
+                  </div>
+                  
+                  <p className="text-gray-300 mb-6 leading-relaxed text-sm">
+                    Relevez des défis chronométrés, grimpez dans les classements et débloquez des badges exclusifs.
+                  </p>
+                  
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    <div className="bg-black/20 rounded-lg p-3 text-center">
+                      <Clock className="w-4 h-4 mx-auto mb-1 text-yellow-400" />
+                      <span className="text-xs text-gray-300">Chronométré</span>
+                    </div>
+                    <div className="bg-black/20 rounded-lg p-3 text-center">
+                      <Trophy className="w-4 h-4 mx-auto mb-1 text-orange-400" />
+                      <span className="text-xs text-gray-300">Classements</span>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-semibold py-3 px-6 rounded-xl text-center group-hover:from-yellow-600 group-hover:to-orange-600 transition-all duration-200">
+                    Relever les Défis
                   </div>
                 </div>
               </div>
@@ -338,50 +385,7 @@ export function MainInterface() {
             </Link>
           </motion.div>
 
-          {/* Documentation Card */}
-          <motion.div
-            whileHover={{ scale: 1.02, y: -5 }}
-            whileTap={{ scale: 0.98 }}
-            className="group relative"
-          >
-                            <Link href="/glossary" className="block h-full">
-              <div className="relative bg-gradient-to-br from-orange-900/80 to-red-900/80 backdrop-blur-xl rounded-3xl p-8 border border-orange-500/30 hover:border-orange-400/60 transition-all duration-500 h-full cursor-pointer overflow-hidden">
-                {/* Effet de brillance */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                
-                <div className="relative z-10">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl w-16 h-16 flex items-center justify-center group-hover:shadow-lg group-hover:shadow-orange-500/25 transition-all duration-300">
-                      <BookOpen className="w-8 h-8 text-white" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-white">📚 Documentation</h2>
-                      <p className="text-orange-300 text-sm">Référence CLI</p>
-                    </div>
-                  </div>
-                  
-                  <p className="text-gray-300 mb-6 leading-relaxed text-sm">
-                    Consultez la référence complète des commandes CLI avec des exemples pratiques et explications détaillées.
-                  </p>
-                  
-                  <div className="grid grid-cols-2 gap-3 mb-6">
-                    <div className="bg-black/20 rounded-lg p-3 text-center">
-                      <BookOpen className="w-4 h-4 mx-auto mb-1 text-orange-400" />
-                      <span className="text-xs text-gray-300">Complet</span>
-                    </div>
-                    <div className="bg-black/20 rounded-lg p-3 text-center">
-                      <Target className="w-4 h-4 mx-auto mb-1 text-red-400" />
-                      <span className="text-xs text-gray-300">Pratique</span>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold py-3 px-6 rounded-xl text-center group-hover:from-orange-600 group-hover:to-red-600 transition-all duration-200">
-                    Consulter la Doc
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </motion.div>
+
 
           {/* Quiz Card */}
           <motion.div
@@ -494,8 +498,18 @@ export function MainInterface() {
                 <div className="text-sm text-gray-400">Niveaux difficulté</div>
               </div>
               <div className="text-center p-4 bg-black/20 rounded-xl">
-                <div className="text-3xl font-bold text-purple-400 mb-1">17</div>
+                <div className="text-3xl font-bold text-purple-400 mb-1">25</div>
                 <div className="text-sm text-gray-400">Badges à débloquer</div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="text-center p-4 bg-black/20 rounded-xl">
+                <div className="text-3xl font-bold text-yellow-400 mb-1">12</div>
+                <div className="text-sm text-gray-400">Défis disponibles</div>
+              </div>
+              <div className="text-center p-4 bg-black/20 rounded-xl">
+                <div className="text-3xl font-bold text-orange-400 mb-1">4</div>
+                <div className="text-sm text-gray-400">Catégories de défis</div>
               </div>
             </div>
             <div className="mt-6 p-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 rounded-xl border border-purple-500/30">

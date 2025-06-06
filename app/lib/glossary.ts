@@ -1,7 +1,9 @@
+import Fuse from 'fuse.js';
+
 export interface GlossaryEntry {
   id: string;
   term: string;
-  category: 'command' | 'concept' | 'option' | 'file-type';
+  category: 'command' | 'concept' | 'option' | 'file-type' | 'shortcut' | 'pattern';
   shortDescription: string;
   fullDescription: string;
   syntax?: string;
@@ -9,11 +11,21 @@ export interface GlossaryEntry {
     command: string;
     description: string;
     output?: string;
+    interactive?: boolean;
+    explanation?: string;
   }[];
   relatedTerms: string[];
   aliases?: string[];
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   tags: string[];
+  prerequisites?: string[];
+  tips?: string[];
+  warnings?: string[];
+  useCases?: string[];
+  cheatSheet?: {
+    title: string;
+    commands: { cmd: string; desc: string }[];
+  };
 }
 
 export const glossaryEntries: GlossaryEntry[] = [
@@ -23,34 +35,73 @@ export const glossaryEntries: GlossaryEntry[] = [
     term: 'ls',
     category: 'command',
     shortDescription: 'Liste le contenu d\'un répertoire',
-    fullDescription: 'La commande ls (list) affiche la liste des fichiers et dossiers contenus dans un répertoire. C\'est l\'une des commandes les plus utilisées en ligne de commande.',
+    fullDescription: 'La commande ls (list) affiche la liste des fichiers et dossiers contenus dans un répertoire. C\'est l\'une des commandes les plus utilisées en ligne de commande pour explorer le système de fichiers.',
     syntax: 'ls [options] [répertoire]',
     examples: [
       {
         command: 'ls',
         description: 'Liste les fichiers du répertoire courant',
-        output: 'Documents  Downloads  Pictures  Videos'
+        output: 'Documents  Downloads  Pictures  Videos',
+        interactive: true,
+        explanation: 'Affiche uniquement les fichiers et dossiers visibles'
       },
       {
         command: 'ls -l',
         description: 'Affichage détaillé avec permissions, taille, date',
-        output: 'drwxr-xr-x  5 user  staff   160 Dec 15 10:30 Documents'
+        output: 'drwxr-xr-x  5 user  staff   160 Dec 15 10:30 Documents',
+        explanation: 'Format long avec toutes les métadonnées'
       },
       {
         command: 'ls -la',
         description: 'Inclut les fichiers cachés (commençant par .)',
-        output: '.bashrc  .profile  Documents  Downloads'
+        output: '.bashrc  .profile  Documents  Downloads',
+        explanation: 'Le -a affiche TOUS les fichiers, y compris cachés'
+      },
+      {
+        command: 'ls -lh',
+        description: 'Tailles lisibles par l\'humain (K, M, G)',
+        output: 'drwxr-xr-x  5 user  staff   160B Dec 15 10:30 Documents',
+        explanation: 'Le -h rend les tailles plus compréhensibles'
+      },
+      {
+        command: 'ls -lt',
+        description: 'Tri par date de modification (plus récent en premier)',
+        explanation: 'Utile pour voir les fichiers récemment modifiés'
       },
       {
         command: 'ls *.txt',
         description: 'Liste uniquement les fichiers .txt',
-        output: 'readme.txt  notes.txt  config.txt'
+        output: 'readme.txt  notes.txt  config.txt',
+        explanation: 'Utilise les wildcards pour filtrer'
       }
     ],
-    relatedTerms: ['pwd', 'cd', 'find', 'tree'],
+    relatedTerms: ['pwd', 'cd', 'find', 'tree', 'stat'],
     aliases: ['dir'],
     difficulty: 'beginner',
-    tags: ['navigation', 'fichiers', 'listing']
+    tags: ['navigation', 'fichiers', 'listing', 'exploration'],
+    tips: [
+      'Utilisez ls -la pour voir tous les fichiers cachés',
+      'ls -lh rend les tailles plus lisibles',
+      'ls -lt trie par date de modification',
+      'Combinez les options : ls -lath pour tout voir trié par date'
+    ],
+    useCases: [
+      'Explorer le contenu d\'un dossier',
+      'Vérifier les permissions de fichiers',
+      'Trouver les fichiers récemment modifiés',
+      'Lister des fichiers par extension'
+    ],
+    cheatSheet: {
+      title: 'Options ls essentielles',
+      commands: [
+        { cmd: 'ls -l', desc: 'Format long détaillé' },
+        { cmd: 'ls -a', desc: 'Inclut fichiers cachés' },
+        { cmd: 'ls -h', desc: 'Tailles lisibles' },
+        { cmd: 'ls -t', desc: 'Tri par date' },
+        { cmd: 'ls -r', desc: 'Ordre inverse' },
+        { cmd: 'ls -S', desc: 'Tri par taille' }
+      ]
+    }
   },
 
   {
@@ -58,33 +109,66 @@ export const glossaryEntries: GlossaryEntry[] = [
     term: 'cd',
     category: 'command',
     shortDescription: 'Change de répertoire courant',
-    fullDescription: 'La commande cd (change directory) permet de naviguer dans l\'arborescence des fichiers en changeant le répertoire de travail courant.',
+    fullDescription: 'La commande cd (change directory) permet de naviguer dans l\'arborescence des fichiers en changeant le répertoire de travail courant. C\'est la commande de navigation principale en ligne de commande.',
     syntax: 'cd [répertoire]',
     examples: [
       {
         command: 'cd /home/user',
         description: 'Va au répertoire /home/user (chemin absolu)',
+        explanation: 'Chemin absolu : commence par / et part de la racine'
       },
       {
         command: 'cd Documents',
         description: 'Va au dossier Documents (chemin relatif)',
+        explanation: 'Chemin relatif : part du répertoire courant'
       },
       {
         command: 'cd ..',
         description: 'Remonte d\'un niveau dans l\'arborescence',
+        interactive: true,
+        explanation: '.. représente le répertoire parent'
       },
       {
         command: 'cd ~',
         description: 'Va au répertoire personnel de l\'utilisateur',
+        explanation: '~ est un raccourci vers votre dossier home'
       },
       {
         command: 'cd -',
         description: 'Retourne au répertoire précédent',
+        explanation: 'Très utile pour naviguer entre deux dossiers'
+      },
+      {
+        command: 'cd',
+        description: 'Va au répertoire personnel (équivalent à cd ~)',
+        explanation: 'cd sans argument = retour à la maison'
       }
     ],
-    relatedTerms: ['pwd', 'ls', 'mkdir'],
+    relatedTerms: ['pwd', 'ls', 'mkdir', 'pushd', 'popd'],
     difficulty: 'beginner',
-    tags: ['navigation', 'répertoire', 'déplacement']
+    tags: ['navigation', 'répertoire', 'déplacement'],
+    tips: [
+      'Utilisez la tabulation pour l\'autocomplétion des noms',
+      'cd - pour alterner entre deux répertoires',
+      'cd sans argument retourne toujours au home',
+      'Utilisez pwd après cd pour confirmer votre position'
+    ],
+    useCases: [
+      'Naviguer dans l\'arborescence de fichiers',
+      'Aller rapidement au répertoire personnel',
+      'Remonter dans l\'arborescence',
+      'Alterner entre deux dossiers de travail'
+    ],
+    cheatSheet: {
+      title: 'Raccourcis cd essentiels',
+      commands: [
+        { cmd: 'cd ~', desc: 'Répertoire personnel' },
+        { cmd: 'cd ..', desc: 'Répertoire parent' },
+        { cmd: 'cd -', desc: 'Répertoire précédent' },
+        { cmd: 'cd /', desc: 'Racine du système' },
+        { cmd: 'cd ../..', desc: 'Remonter 2 niveaux' }
+      ]
+    }
   },
 
   {
@@ -92,18 +176,36 @@ export const glossaryEntries: GlossaryEntry[] = [
     term: 'pwd',
     category: 'command',
     shortDescription: 'Affiche le répertoire courant',
-    fullDescription: 'La commande pwd (print working directory) affiche le chemin complet du répertoire dans lequel vous vous trouvez actuellement.',
-    syntax: 'pwd',
+    fullDescription: 'La commande pwd (print working directory) affiche le chemin complet du répertoire dans lequel vous vous trouvez actuellement. Essentielle pour s\'orienter dans le système de fichiers.',
+    syntax: 'pwd [options]',
     examples: [
       {
         command: 'pwd',
         description: 'Affiche le répertoire courant',
-        output: '/home/user/Documents'
+        output: '/home/user/Documents',
+        interactive: true,
+        explanation: 'Montre votre position exacte dans l\'arborescence'
+      },
+      {
+        command: 'pwd -P',
+        description: 'Affiche le chemin physique (résout les liens symboliques)',
+        explanation: 'Utile quand vous travaillez avec des liens symboliques'
       }
     ],
-    relatedTerms: ['cd', 'ls'],
+    relatedTerms: ['cd', 'ls', 'realpath'],
     difficulty: 'beginner',
-    tags: ['navigation', 'position', 'répertoire']
+    tags: ['navigation', 'position', 'répertoire', 'orientation'],
+    tips: [
+      'Utilisez pwd quand vous êtes perdu dans l\'arborescence',
+      'Combinez avec ls pour voir où vous êtes et ce qu\'il y a',
+      'pwd -P résout les liens symboliques'
+    ],
+    useCases: [
+      'Vérifier sa position dans l\'arborescence',
+      'Confirmer le répertoire après navigation',
+      'Débugger des scripts qui changent de répertoire',
+      'Copier le chemin courant pour d\'autres commandes'
+    ]
   },
 
   {
@@ -111,25 +213,64 @@ export const glossaryEntries: GlossaryEntry[] = [
     term: 'mkdir',
     category: 'command',
     shortDescription: 'Crée un ou plusieurs répertoires',
-    fullDescription: 'La commande mkdir (make directory) permet de créer un ou plusieurs nouveaux répertoires.',
+    fullDescription: 'La commande mkdir (make directory) permet de créer un ou plusieurs nouveaux répertoires. Elle peut créer des structures complexes d\'un coup avec l\'option -p.',
     syntax: 'mkdir [options] répertoire...',
     examples: [
       {
         command: 'mkdir nouveau_dossier',
         description: 'Crée un dossier nommé "nouveau_dossier"',
+        interactive: true,
+        explanation: 'Création simple d\'un répertoire'
       },
       {
-        command: 'mkdir -p dossier/sous-dossier',
+        command: 'mkdir -p projet/src/components',
         description: 'Crée l\'arborescence complète si elle n\'existe pas',
+        explanation: '-p crée tous les répertoires parents nécessaires'
       },
       {
         command: 'mkdir dossier1 dossier2 dossier3',
         description: 'Crée plusieurs dossiers en une seule commande',
+        explanation: 'Création multiple en une fois'
+      },
+      {
+        command: 'mkdir -m 755 public_folder',
+        description: 'Crée avec des permissions spécifiques',
+        explanation: '-m définit les permissions lors de la création'
+      },
+      {
+        command: 'mkdir -v backup_$(date +%Y%m%d)',
+        description: 'Crée un dossier avec la date du jour',
+        explanation: 'Utilise la substitution de commande pour le nom'
       }
     ],
-    relatedTerms: ['rmdir', 'rm', 'cd', 'ls'],
+    relatedTerms: ['rmdir', 'rm', 'cd', 'ls', 'chmod'],
     difficulty: 'beginner',
-    tags: ['création', 'répertoire', 'dossier']
+    tags: ['création', 'répertoire', 'dossier', 'structure'],
+    tips: [
+      'Utilisez -p pour créer des arborescences complexes',
+      'mkdir -v pour voir ce qui est créé',
+      'Combinez avec date pour des noms uniques',
+      'Vérifiez avec ls après création'
+    ],
+    warnings: [
+      'mkdir échoue si le répertoire existe déjà (sans -p)',
+      'Attention aux espaces dans les noms (utilisez des guillemets)'
+    ],
+    useCases: [
+      'Organiser des projets avec des dossiers',
+      'Créer des structures de sauvegarde',
+      'Préparer l\'arborescence pour des scripts',
+      'Organiser des téléchargements par catégorie'
+    ],
+    cheatSheet: {
+      title: 'Options mkdir utiles',
+      commands: [
+        { cmd: 'mkdir -p', desc: 'Crée parents si nécessaire' },
+        { cmd: 'mkdir -v', desc: 'Mode verbeux' },
+        { cmd: 'mkdir -m', desc: 'Définit permissions' },
+        { cmd: 'mkdir {a,b,c}', desc: 'Création multiple avec expansion' }
+      ]
+    }
   },
 
   {
@@ -137,27 +278,71 @@ export const glossaryEntries: GlossaryEntry[] = [
     term: 'cat',
     category: 'command',
     shortDescription: 'Affiche le contenu d\'un fichier',
-    fullDescription: 'La commande cat (concatenate) affiche le contenu d\'un ou plusieurs fichiers. Elle peut aussi être utilisée pour créer ou concaténer des fichiers.',
-    syntax: 'cat [options] fichier...',
+    fullDescription: 'La commande cat (concatenate) affiche le contenu d\'un ou plusieurs fichiers. Elle peut aussi être utilisée pour créer, concaténer des fichiers ou rediriger du contenu.',
+    syntax: 'cat [options] [fichier...]',
     examples: [
       {
         command: 'cat fichier.txt',
         description: 'Affiche le contenu de fichier.txt',
-        output: 'Contenu du fichier...'
+        output: 'Contenu du fichier...',
+        interactive: true,
+        explanation: 'Lecture simple d\'un fichier'
       },
       {
         command: 'cat fichier1.txt fichier2.txt',
         description: 'Affiche le contenu des deux fichiers bout à bout',
+        explanation: 'Concaténation de plusieurs fichiers'
       },
       {
         command: 'cat -n fichier.txt',
         description: 'Affiche avec numérotation des lignes',
-        output: '1  Première ligne\n2  Deuxième ligne'
+        output: '1  Première ligne\n2  Deuxième ligne',
+        explanation: '-n ajoute les numéros de ligne'
+      },
+      {
+        command: 'cat -A fichier.txt',
+        description: 'Affiche tous les caractères, y compris invisibles',
+        explanation: 'Utile pour débugger des problèmes de formatage'
+      },
+      {
+        command: 'cat > nouveau.txt',
+        description: 'Crée un nouveau fichier (Ctrl+D pour terminer)',
+        explanation: 'Redirection pour créer du contenu'
+      },
+      {
+        command: 'cat fichier1.txt fichier2.txt > fusion.txt',
+        description: 'Fusionne deux fichiers dans un nouveau',
+        explanation: 'Concaténation avec redirection'
       }
     ],
-    relatedTerms: ['less', 'more', 'head', 'tail', 'echo'],
+    relatedTerms: ['less', 'more', 'head', 'tail', 'echo', 'tac'],
     difficulty: 'beginner',
-    tags: ['lecture', 'fichier', 'contenu', 'affichage']
+    tags: ['lecture', 'fichier', 'contenu', 'affichage', 'concaténation'],
+    tips: [
+      'Utilisez less ou more pour les gros fichiers',
+      'cat -n pour numéroter les lignes',
+      'cat -A pour voir les caractères invisibles',
+      'Combinez avec grep pour filtrer : cat file.txt | grep "motif"'
+    ],
+    warnings: [
+      'cat affiche tout d\'un coup, peut être illisible pour gros fichiers',
+      'Attention à la redirection > qui écrase le fichier existant'
+    ],
+    useCases: [
+      'Lire rapidement un petit fichier',
+      'Fusionner plusieurs fichiers',
+      'Créer des fichiers simples',
+      'Débugger des problèmes de formatage'
+    ],
+    cheatSheet: {
+      title: 'Options cat essentielles',
+      commands: [
+        { cmd: 'cat -n', desc: 'Numéroter les lignes' },
+        { cmd: 'cat -A', desc: 'Montrer caractères invisibles' },
+        { cmd: 'cat -s', desc: 'Supprimer lignes vides multiples' },
+        { cmd: 'cat -b', desc: 'Numéroter lignes non-vides' }
+      ]
+    }
   },
 
   {
@@ -165,31 +350,79 @@ export const glossaryEntries: GlossaryEntry[] = [
     term: 'grep',
     category: 'command',
     shortDescription: 'Recherche des motifs dans du texte',
-    fullDescription: 'La commande grep (global regular expression print) recherche des lignes contenant un motif spécifique dans un ou plusieurs fichiers.',
+    fullDescription: 'La commande grep (global regular expression print) recherche des lignes contenant un motif spécifique dans un ou plusieurs fichiers. C\'est l\'outil de recherche textuelle le plus puissant en ligne de commande.',
     syntax: 'grep [options] motif [fichier...]',
     examples: [
       {
         command: 'grep "erreur" log.txt',
         description: 'Recherche le mot "erreur" dans log.txt',
-        output: 'Ligne 45: Une erreur s\'est produite'
+        output: 'Ligne 45: Une erreur s\'est produite',
+        interactive: true,
+        explanation: 'Recherche simple et sensible à la casse'
       },
       {
         command: 'grep -i "ERROR" log.txt',
         description: 'Recherche insensible à la casse',
+        explanation: '-i ignore la différence majuscules/minuscules'
       },
       {
         command: 'grep -n "TODO" *.txt',
         description: 'Recherche avec numéros de ligne dans tous les .txt',
-        output: 'notes.txt:12: TODO: Finir le projet'
+        output: 'notes.txt:12: TODO: Finir le projet',
+        explanation: '-n affiche le numéro de ligne de chaque résultat'
+      },
+      {
+        command: 'grep -r "function" src/',
+        description: 'Recherche récursive dans tous les fichiers du dossier src',
+        explanation: '-r parcourt tous les sous-dossiers'
       },
       {
         command: 'ls -l | grep "^d"',
         description: 'Filtre pour n\'afficher que les répertoires',
+        explanation: 'Utilise grep avec un pipe pour filtrer la sortie de ls'
+      },
+      {
+        command: 'grep -v "commentaire" code.js',
+        description: 'Affiche toutes les lignes SAUF celles contenant "commentaire"',
+        explanation: '-v inverse la sélection'
+      },
+      {
+        command: 'grep -E "^[0-9]+$" numbers.txt',
+        description: 'Utilise les expressions régulières étendues',
+        explanation: '-E active les regex étendues pour des motifs complexes'
       }
     ],
-    relatedTerms: ['find', 'sed', 'awk', 'sort'],
+    relatedTerms: ['find', 'sed', 'awk', 'sort', 'cut', 'rg'],
     difficulty: 'intermediate',
-    tags: ['recherche', 'filtrage', 'texte', 'motif']
+    tags: ['recherche', 'filtrage', 'texte', 'motif', 'regex'],
+    prerequisites: ['cat', 'ls'],
+    tips: [
+      'Utilisez -i pour ignorer la casse',
+      'Combinez avec -n pour voir les numéros de ligne',
+      'grep -r pour chercher dans tous les sous-dossiers',
+      'Utilisez des guillemets pour les motifs avec espaces'
+    ],
+    warnings: [
+      'grep est sensible à la casse par défaut',
+      'Les caractères spéciaux dans les motifs doivent être échappés'
+    ],
+    useCases: [
+      'Chercher des erreurs dans les logs',
+      'Filtrer la sortie d\'autres commandes',
+      'Trouver des fonctions dans le code',
+      'Analyser des fichiers de configuration'
+    ],
+    cheatSheet: {
+      title: 'Options grep essentielles',
+      commands: [
+        { cmd: 'grep -i', desc: 'Insensible à la casse' },
+        { cmd: 'grep -n', desc: 'Affiche numéros de ligne' },
+        { cmd: 'grep -r', desc: 'Recherche récursive' },
+        { cmd: 'grep -v', desc: 'Inverse la sélection' },
+        { cmd: 'grep -c', desc: 'Compte les occurrences' },
+        { cmd: 'grep -l', desc: 'Affiche seulement noms fichiers' }
+      ]
+    }
   },
 
   {
@@ -523,63 +756,91 @@ export const glossaryEntries: GlossaryEntry[] = [
     term: 'Pipe (|)',
     category: 'concept',
     shortDescription: 'Connecte la sortie d\'une commande à l\'entrée d\'une autre',
-    fullDescription: 'Le pipe (|) est un mécanisme qui permet de rediriger la sortie d\'une commande vers l\'entrée d\'une autre commande, créant ainsi une chaîne de traitement.',
-    syntax: 'commande1 | commande2',
+    fullDescription: 'Le pipe (|) est un mécanisme fondamental qui permet de chaîner des commandes en connectant la sortie standard d\'une commande à l\'entrée standard de la suivante. C\'est la base de la philosophie Unix.',
+    syntax: 'commande1 | commande2 | commande3',
     examples: [
       {
         command: 'ls -l | grep "txt"',
         description: 'Liste les fichiers puis filtre ceux contenant "txt"',
-        output: '-rw-r--r--  1 user  staff  1024 Dec 15 10:30 readme.txt'
+        interactive: true,
+        explanation: 'La sortie de ls devient l\'entrée de grep'
       },
       {
         command: 'cat fichier.txt | sort | uniq',
         description: 'Affiche, trie et supprime les doublons',
+        explanation: 'Chaîne de 3 commandes pour traiter le texte'
       },
       {
-        command: 'ps aux | grep python',
-        description: 'Liste les processus puis filtre ceux contenant "python"',
+        command: 'ps aux | grep python | wc -l',
+        description: 'Compte le nombre de processus Python en cours',
+        explanation: 'Pipeline complexe pour analyser les processus'
       },
       {
-        command: 'history | tail -20',
-        description: 'Affiche les 20 dernières commandes de l\'historique',
+        command: 'history | tail -10',
+        description: 'Affiche les 10 dernières commandes de l\'historique',
+        explanation: 'Combine historique et affichage des dernières lignes'
       }
     ],
-    relatedTerms: ['redirection', 'stdout', 'stdin'],
+    relatedTerms: ['redirection', 'stdout', 'stdin', 'tee'],
     difficulty: 'intermediate',
-    tags: ['redirection', 'chaînage', 'flux']
+    tags: ['pipeline', 'chaînage', 'flux', 'unix'],
+    tips: [
+      'Pensez en termes de flux de données',
+      'Chaque commande transforme les données',
+      'Testez chaque étape du pipeline séparément',
+      'Utilisez tee pour voir les données intermédiaires'
+    ],
+    useCases: [
+      'Filtrer et transformer des données',
+      'Analyser des logs complexes',
+      'Traiter des listes de fichiers',
+      'Créer des rapports personnalisés'
+    ]
   },
 
   {
     id: 'redirection',
-    term: 'Redirection',
+    term: 'Redirection (>, >>, <)',
     category: 'concept',
-    shortDescription: 'Redirige les flux d\'entrée/sortie',
-    fullDescription: 'La redirection permet de diriger les flux d\'entrée et de sortie des commandes vers des fichiers ou d\'autres commandes.',
+    shortDescription: 'Redirige les flux d\'entrée et de sortie',
+    fullDescription: 'La redirection permet de contrôler où vont les données en entrée et sortie des commandes. Essentiel pour sauvegarder des résultats ou traiter des fichiers.',
+    syntax: 'commande > fichier (sortie), commande < fichier (entrée)',
     examples: [
       {
-        command: 'echo "Hello" > fichier.txt',
-        description: 'Écrit dans un fichier (écrase le contenu)',
+        command: 'ls -l > liste.txt',
+        description: 'Sauvegarde la liste des fichiers dans liste.txt',
+        interactive: true,
+        explanation: '> redirige la sortie vers un fichier (écrase)'
       },
       {
-        command: 'echo "World" >> fichier.txt',
-        description: 'Ajoute à la fin d\'un fichier',
+        command: 'echo "nouvelle ligne" >> fichier.txt',
+        description: 'Ajoute du texte à la fin du fichier',
+        explanation: '>> ajoute à la fin sans écraser'
       },
       {
-        command: 'commande < fichier.txt',
-        description: 'Utilise un fichier comme entrée',
+        command: 'sort < noms.txt',
+        description: 'Trie le contenu du fichier noms.txt',
+        explanation: '< utilise le fichier comme entrée'
       },
       {
-        command: 'commande 2> erreurs.log',
-        description: 'Redirige les erreurs vers un fichier',
-      },
-      {
-        command: 'commande > sortie.txt 2>&1',
-        description: 'Redirige sortie et erreurs vers le même fichier',
+        command: 'grep "erreur" log.txt > erreurs.txt 2>&1',
+        description: 'Redirige sortie standard ET erreurs vers le fichier',
+        explanation: '2>&1 redirige aussi les erreurs'
       }
     ],
     relatedTerms: ['pipe', 'stdout', 'stderr', 'stdin'],
     difficulty: 'intermediate',
-    tags: ['flux', 'fichier', 'sortie', 'entrée']
+    tags: ['flux', 'fichier', 'sauvegarde', 'entrée-sortie'],
+    warnings: [
+      '> écrase complètement le fichier existant',
+      'Attention à ne pas rediriger vers le fichier source'
+    ],
+    useCases: [
+      'Sauvegarder des résultats de commandes',
+      'Créer des logs personnalisés',
+      'Traiter des fichiers de données',
+      'Automatiser des rapports'
+    ]
   },
 
   {
@@ -676,33 +937,53 @@ export const glossaryEntries: GlossaryEntry[] = [
   }
 ];
 
-// Fonctions utilitaires pour la recherche
+// Configuration Fuse.js pour recherche avancée
+const fuseOptions = {
+  keys: [
+    { name: 'term', weight: 0.4 },
+    { name: 'shortDescription', weight: 0.3 },
+    { name: 'tags', weight: 0.2 },
+    { name: 'aliases', weight: 0.1 }
+  ],
+  threshold: 0.3,
+  includeScore: true,
+  includeMatches: true,
+  minMatchCharLength: 2
+};
+
+const fuse = new Fuse(glossaryEntries, fuseOptions);
+
 export const searchGlossary = (query: string): GlossaryEntry[] => {
-  if (!query.trim()) return glossaryEntries;
+  if (!query.trim()) {
+    return glossaryEntries;
+  }
+
+  const results = fuse.search(query);
+  return results.map(result => result.item);
+};
+
+export const getAdvancedSearch = (query: string, filters: {
+  category?: string;
+  difficulty?: string;
+  tags?: string[];
+}) => {
+  let results = searchGlossary(query);
   
-  const searchTerm = query.toLowerCase().trim();
+  if (filters.category && filters.category !== 'all') {
+    results = results.filter(entry => entry.category === filters.category);
+  }
   
-  return glossaryEntries.filter(entry => {
-    // Recherche dans le terme principal
-    if (entry.term.toLowerCase().includes(searchTerm)) return true;
-    
-    // Recherche dans les alias
-    if (entry.aliases?.some(alias => alias.toLowerCase().includes(searchTerm))) return true;
-    
-    // Recherche dans la description courte
-    if (entry.shortDescription.toLowerCase().includes(searchTerm)) return true;
-    
-    // Recherche dans les tags
-    if (entry.tags.some(tag => tag.toLowerCase().includes(searchTerm))) return true;
-    
-    // Recherche dans les exemples
-    if (entry.examples.some(example => 
-      example.command.toLowerCase().includes(searchTerm) ||
-      example.description.toLowerCase().includes(searchTerm)
-    )) return true;
-    
-    return false;
-  });
+  if (filters.difficulty && filters.difficulty !== 'all') {
+    results = results.filter(entry => entry.difficulty === filters.difficulty);
+  }
+  
+  if (filters.tags && filters.tags.length > 0) {
+    results = results.filter(entry => 
+      filters.tags!.some(tag => entry.tags.includes(tag))
+    );
+  }
+  
+  return results;
 };
 
 export const getGlossaryByCategory = (category: GlossaryEntry['category']) => {
@@ -718,7 +999,8 @@ export const getRelatedEntries = (entryId: string): GlossaryEntry[] => {
   if (!entry) return [];
   
   return glossaryEntries.filter(e => 
-    entry.relatedTerms.includes(e.id) || e.relatedTerms.includes(entryId)
+    entry.relatedTerms.includes(e.id) || 
+    e.relatedTerms.includes(entryId)
   );
 };
 
@@ -726,33 +1008,50 @@ export const getGlossaryEntry = (id: string) => {
   return glossaryEntries.find(entry => entry.id === id);
 };
 
-// Auto-complétion
 export const getAutocompleteSuggestions = (query: string, limit: number = 5): string[] => {
   if (!query.trim()) return [];
   
-  const searchTerm = query.toLowerCase();
   const suggestions = new Set<string>();
   
   glossaryEntries.forEach(entry => {
-    // Suggestions basées sur le terme principal
-    if (entry.term.toLowerCase().startsWith(searchTerm)) {
+    if (entry.term.toLowerCase().includes(query.toLowerCase())) {
       suggestions.add(entry.term);
     }
-    
-    // Suggestions basées sur les alias
     entry.aliases?.forEach(alias => {
-      if (alias.toLowerCase().startsWith(searchTerm)) {
+      if (alias.toLowerCase().includes(query.toLowerCase())) {
         suggestions.add(alias);
       }
     });
-    
-    // Suggestions basées sur les tags
     entry.tags.forEach(tag => {
-      if (tag.toLowerCase().startsWith(searchTerm)) {
+      if (tag.toLowerCase().includes(query.toLowerCase())) {
         suggestions.add(tag);
       }
     });
   });
   
   return Array.from(suggestions).slice(0, limit);
+};
+
+export const getAllTags = (): string[] => {
+  const tags = new Set<string>();
+  glossaryEntries.forEach(entry => {
+    entry.tags.forEach(tag => tags.add(tag));
+  });
+  return Array.from(tags).sort();
+};
+
+export const getGlossaryStats = () => {
+  const stats = {
+    total: glossaryEntries.length,
+    byCategory: {} as Record<string, number>,
+    byDifficulty: {} as Record<string, number>,
+    totalTags: getAllTags().length
+  };
+  
+  glossaryEntries.forEach(entry => {
+    stats.byCategory[entry.category] = (stats.byCategory[entry.category] || 0) + 1;
+    stats.byDifficulty[entry.difficulty] = (stats.byDifficulty[entry.difficulty] || 0) + 1;
+  });
+  
+  return stats;
 }; 

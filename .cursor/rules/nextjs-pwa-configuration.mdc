@@ -1,0 +1,197 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# TerminalQuest - Configuration Next.js et PWA
+
+## Vue d'ensemble
+TerminalQuest utilise Next.js 15 avec App Router et est configuré comme une Progressive Web App (PWA) complète avec fonctionnalités offline et installation native.
+
+## Configuration Next.js
+
+### Fichier de Configuration Principal
+- [next.config.ts](mdc:next.config.ts) - Configuration Next.js avec PWA (146 lignes)
+
+### Fonctionnalités Activées
+- **App Router**: Nouveau système de routage Next.js 15
+- **Turbopack**: Mode développement accéléré (`npm run dev --turbopack`)
+- **TypeScript**: Support natif avec configuration stricte
+- **PWA**: Intégration next-pwa pour fonctionnalités offline
+
+### Configuration TypeScript
+- [tsconfig.json](mdc:tsconfig.json) - Configuration TypeScript stricte
+- **Strict Mode**: Typage strict activé
+- **Path Mapping**: Alias pour imports simplifiés
+- **JSX**: Support React 19 avec nouvelles fonctionnalités
+
+## Configuration PWA
+
+### Manifest Application
+- [manifest.ts](mdc:app/manifest.ts) - Manifest PWA dynamique (107 lignes)
+
+### Fonctionnalités PWA
+- **Installation**: Possibilité d'installer l'app sur l'appareil
+- **Offline**: Fonctionnement sans connexion internet
+- **Service Worker**: Cache intelligent des ressources
+- **Notifications**: Support des notifications push (préparé)
+- **Icônes**: Jeu complet d'icônes pour tous les appareils
+
+### Composants PWA
+- [PWAInstallPrompt.tsx](mdc:app/components/PWAInstallPrompt.tsx) - Prompt d'installation (190 lignes)
+- [usePWA.ts](mdc:app/hooks/usePWA.ts) - Hook pour fonctionnalités PWA (121 lignes)
+
+## Configuration Styling
+
+### Tailwind CSS 4
+- [postcss.config.mjs](mdc:postcss.config.mjs) - Configuration PostCSS
+- **Version**: Tailwind CSS 4 (dernière version)
+- **Optimisations**: Purge automatique, optimisations de build
+- **Personnalisation**: Variables CSS custom, thème étendu
+
+### Styles Globaux
+- [globals.css](mdc:app/globals.css) - Styles globaux (250 lignes)
+- **Variables CSS**: Couleurs, espacements, animations
+- **Animations**: Transitions fluides avec Framer Motion
+- **Responsive**: Design mobile-first
+
+## Configuration SEO et Métadonnées
+
+### Layout Principal
+- [layout.tsx](mdc:app/layout.tsx) - Layout avec métadonnées complètes (88 lignes)
+
+### Métadonnées Configurées
+- **Title et Description**: Optimisés pour le SEO
+- **Open Graph**: Partage sur réseaux sociaux
+- **Twitter Cards**: Aperçus Twitter optimisés
+- **Keywords**: Mots-clés ciblés pour le référencement
+- **Canonical URL**: URL canonique pour éviter le contenu dupliqué
+
+### Données Structurées
+- [StructuredData.tsx](mdc:app/components/StructuredData.tsx) - Schema.org markup (50 lignes)
+- **Type**: Educational Application
+- **Données**: Informations structurées pour les moteurs de recherche
+
+### Sitemap Dynamique
+- [sitemap.ts](mdc:app/sitemap.ts) - Génération automatique du sitemap (50 lignes)
+
+## Configuration de Développement
+
+### Scripts Package.json
+```json
+{
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  }
+}
+```
+
+### ESLint Configuration
+- [eslint.config.mjs](mdc:eslint.config.mjs) - Configuration ESLint (17 lignes)
+- **Règles**: Next.js recommandées + règles personnalisées
+- **TypeScript**: Support complet avec vérifications strictes
+
+### Environnement de Développement
+- **Hot Reload**: Rechargement instantané avec Turbopack
+- **Error Overlay**: Affichage des erreurs en développement
+- **TypeScript**: Vérification de types en temps réel
+
+## Optimisations de Performance
+
+### Next.js 15 Features
+- **App Router**: Routage optimisé avec layouts partagés
+- **Server Components**: Rendu côté serveur par défaut
+- **Streaming**: Chargement progressif des composants
+- **Image Optimization**: Optimisation automatique des images
+
+### Bundle Optimization
+- **Tree Shaking**: Suppression du code non utilisé
+- **Code Splitting**: Division automatique du code
+- **Lazy Loading**: Chargement différé des composants
+- **Compression**: Gzip et Brotli activés
+
+### Caching Strategy
+- **Static Generation**: Pages statiques quand possible
+- **ISR**: Incremental Static Regeneration pour contenu dynamique
+- **Service Worker**: Cache des ressources statiques
+- **localStorage**: Persistance des données utilisateur
+
+## Configuration de Production
+
+### Build Process
+```bash
+npm run build  # Build optimisé pour production
+npm start      # Serveur de production
+```
+
+### Optimisations de Build
+- **Minification**: CSS et JavaScript minifiés
+- **Compression**: Assets compressés
+- **Source Maps**: Disponibles pour debugging
+- **Bundle Analysis**: Analyse de la taille des bundles
+
+### Déploiement
+- **Static Export**: Possibilité d'export statique
+- **Vercel**: Optimisé pour déploiement Vercel
+- **Docker**: Configuration Docker disponible
+- **CDN**: Assets servis via CDN
+
+## Sécurité et Performance
+
+### Headers de Sécurité
+- **CSP**: Content Security Policy configuré
+- **HSTS**: HTTP Strict Transport Security
+- **X-Frame-Options**: Protection contre clickjacking
+- **X-Content-Type-Options**: Protection MIME type sniffing
+
+### Performance Monitoring
+- **Web Vitals**: Métriques Core Web Vitals
+- **Analytics**: Intégration Google Analytics préparée
+- **Error Tracking**: Système de tracking d'erreurs
+- **Performance API**: Monitoring des performances client
+
+## Configuration des Fonts
+
+### Google Fonts Integration
+```typescript
+import { Geist, Geist_Mono } from "next/font/google";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+```
+
+### Optimisations Fonts
+- **Preload**: Chargement prioritaire des fonts
+- **Display Swap**: Affichage immédiat avec font de fallback
+- **Subset**: Chargement uniquement des caractères nécessaires
+
+## Internationalisation (Préparé)
+
+### Configuration i18n
+- **Locale**: Français par défaut
+- **Structure**: Préparé pour multi-langues
+- **Routing**: Support des URLs localisées
+- **Fallback**: Langue de fallback configurée
+
+## Variables d'Environnement
+
+### Configuration
+- **Development**: Variables de développement
+- **Production**: Variables de production sécurisées
+- **API Keys**: Gestion sécurisée des clés API
+- **Feature Flags**: Activation/désactivation de fonctionnalités
+
+### Fichiers d'Environnement
+- `.env.local` - Variables locales
+- `.env.development` - Variables de développement
+- `.env.production` - Variables de production

@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { SandboxEngine, SandboxResponse } from '../lib/sandboxEngine'
+import { useTutorialStore } from '../stores/tutorialStore'
+import { getTutorialById } from '../lib/tutorials'
 // import { useResponsive, useTouchDevice, useReducedMotion } from '../hooks/useResponsive'
 // import { VirtualKeyboard } from './VirtualKeyboard'
 // import { Keyboard } from 'lucide-react'
@@ -14,7 +16,11 @@ interface TerminalLine {
   directory?: string
 }
 
-export function SandboxTerminal() {
+interface SandboxTerminalProps {
+  onCommandValidated?: (isValid: boolean, command: string, output: string) => void;
+}
+
+export function SandboxTerminal({ onCommandValidated }: SandboxTerminalProps = {}) {
   const [engine] = useState(() => new SandboxEngine())
   const [lines, setLines] = useState<TerminalLine[]>([
     {
@@ -34,6 +40,14 @@ export function SandboxTerminal() {
   const [historyIndex, setHistoryIndex] = useState(-1)
   const [currentDirectory, setCurrentDirectory] = useState('/home/user')
   // const [showVirtualKeyboard, setShowVirtualKeyboard] = useState(false)
+  
+  const { 
+    currentTutorial, 
+    getCurrentStep, 
+    isStepCompleted, 
+    completeStep,
+    nextStep 
+  } = useTutorialStore()
   
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -78,6 +92,42 @@ export function SandboxTerminal() {
     const commandName = command.split(' ')[0]
     console.log('Commande exécutée:', commandName, 'Valide:', response.commandValid)
             // recordCommand(commandName, response.commandValid) // XP désactivé
+
+    // Validation pour les tutoriels
+    if (currentTutorial) {
+      const currentStep = getCurrentStep()
+      if (currentStep && !isStepCompleted(currentStep.id)) {
+        const outputText = response.output.join('\n')
+        
+        // Récupérer la fonction de validation depuis les données originales
+        const originalTutorial = getTutorialById(currentTutorial.id)
+        const originalStep = originalTutorial?.steps.find(step => step.id === currentStep.id)
+        
+        let isValid = false
+        if (originalStep && typeof originalStep.validation === 'function') {
+          isValid = originalStep.validation(outputText, command)
+        } else {
+          // Validation de base si pas de fonction spécifique
+          isValid = command.trim() === currentStep.command
+        }
+        
+        if (isValid) {
+          completeStep(currentStep.id, currentStep.points)
+          newLines.push({
+            type: 'output',
+            content: '✅ Étape validée ! +' + currentStep.points + ' points'
+          })
+          
+          // Auto-passage à l'étape suivante après un délai
+          setTimeout(() => {
+            nextStep()
+          }, 1500)
+        }
+        
+        // Callback pour notifier le parent
+        onCommandValidated?.(isValid, command, outputText)
+      }
+    }
 
     // Gérer la commande clear
     if (response.output.includes('CLEAR_TERMINAL')) {

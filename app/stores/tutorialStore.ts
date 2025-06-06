@@ -12,16 +12,27 @@ export interface TutorialStep {
   hint?: string;
   points: number;
   validation: (output: string, command: string) => boolean;
+  explanation?: string;
+  tips?: string[];
+  commonMistakes?: string[];
+  bonusChallenge?: {
+    description: string;
+    command: string;
+    points: number;
+  };
+  interactiveDemo?: boolean;
 }
 
 export interface Tutorial {
   id: string;
   title: string;
   description: string;
-  level: 'beginner' | 'intermediate' | 'advanced';
+  level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  category?: string;
   estimatedTime: number; // en minutes
   steps: TutorialStep[];
   prerequisites?: string[];
+  learningObjectives?: string[];
 }
 
 export interface TutorialProgress {
@@ -51,6 +62,7 @@ interface TutorialStore {
   getTutorialProgress: (tutorialId: string) => TutorialProgress | null;
   resetTutorial: (tutorialId: string) => void;
   resetAllProgress: () => void;
+  exitCurrentTutorial: () => void;
 }
 
 export const useTutorialStore = create<TutorialStore>()(
@@ -222,6 +234,13 @@ export const useTutorialStore = create<TutorialStore>()(
           currentStepIndex: 0,
           tutorialProgress: {},
           completedTutorials: [],
+        });
+      },
+
+      exitCurrentTutorial: () => {
+        set({
+          currentTutorial: null,
+          currentStepIndex: 0,
         });
       },
     }),

@@ -3,10 +3,10 @@ description:
 globs:
 alwaysApply: false
 ---
-# Système de Progression du Jeu
+# TerminalQuest - Système de Progression du Jeu
 
 ## Vue d'ensemble
-CLIearn utilise un système de progression basé sur l'exploration et l'utilisation de commandes, géré par [gameStore.ts](mdc:app/stores/gameStore.ts) avec Zustand.
+TerminalQuest utilise un système de progression basé sur l'exploration et l'utilisation de commandes, géré par [gameStore.ts](mdc:app/stores/gameStore.ts) et [progressionStore.ts](mdc:app/stores/progressionStore.ts) avec Zustand.
 
 ## État du Jeu (Store Zustand)
 

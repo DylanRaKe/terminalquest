@@ -1,0 +1,145 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# TerminalQuest - Architecture Complète
+
+## Vue d'ensemble
+TerminalQuest est une plateforme d'apprentissage ludique pour maîtriser les commandes CLI et Linux. L'application utilise Next.js 15 avec App Router, TypeScript, Tailwind CSS 4, et Zustand pour la gestion d'état.
+
+## Stack Technologique
+
+### Core Framework
+- **Next.js 15** avec App Router et Turbopack
+- **React 19** avec TypeScript 5
+- **Tailwind CSS 4** pour le styling
+- **Framer Motion** pour les animations
+
+### Gestion d'État et Données
+- **Zustand 5** pour la gestion d'état globale
+- **React Hook Form** pour les formulaires
+- **localStorage** pour la persistance locale
+
+### UI et Expérience
+- **Lucide React** pour les icônes
+- **Prism.js** pour la coloration syntaxique
+- **React Markdown** pour le rendu markdown
+- **Fuse.js** pour la recherche floue
+
+### PWA et Performance
+- **next-pwa** pour les fonctionnalités PWA
+- **Service Workers** pour le cache offline
+- **Manifest** personnalisé pour l'installation
+
+## Architecture des Composants
+
+### Interfaces Principales
+- [MainInterface.tsx](mdc:app/components/MainInterface.tsx) - Interface d'accueil avec navigation
+- [GameInterface.tsx](mdc:app/components/GameInterface.tsx) - Interface de jeu principal
+- [TutorialInterface.tsx](mdc:app/components/TutorialInterface.tsx) - Interface des tutoriels
+- [ChallengeInterface.tsx](mdc:app/components/ChallengeInterface.tsx) - Interface des défis
+- [QuizInterface.tsx](mdc:app/components/QuizInterface.tsx) - Interface des quiz adaptatifs
+- [GlossaryInterface.tsx](mdc:app/components/GlossaryInterface.tsx) - Interface du glossaire
+- [TrainingInterface.tsx](mdc:app/components/TrainingInterface.tsx) - Interface d'entraînement
+
+### Composants Spécialisés
+- [Terminal.tsx](mdc:app/components/Terminal.tsx) - Terminal interactif principal
+- [SandboxTerminal.tsx](mdc:app/components/SandboxTerminal.tsx) - Terminal sandbox pour tests
+- [TutorialPlayer.tsx](mdc:app/components/TutorialPlayer.tsx) - Lecteur de tutoriels interactifs
+- [ChallengePlayer.tsx](mdc:app/components/ChallengePlayer.tsx) - Lecteur de défis
+- [GameMap.tsx](mdc:app/components/GameMap.tsx) - Carte interactive du jeu
+- [Navigation.tsx](mdc:app/components/Navigation.tsx) - Navigation principale
+
+### Système de Progression
+- [ProgressionProvider.tsx](mdc:app/components/ProgressionProvider.tsx) - Provider de progression
+- [ProgressionPanel.tsx](mdc:app/components/ProgressionPanel.tsx) - Panneau de progression
+- [ProgressBar.tsx](mdc:app/components/ProgressBar.tsx) - Barre de progression
+- [PlayerStats.tsx](mdc:app/components/PlayerStats.tsx) - Statistiques joueur
+- [BadgeComponent.tsx](mdc:app/components/BadgeComponent.tsx) - Système de badges
+- [AchievementNotification.tsx](mdc:app/components/AchievementNotification.tsx) - Notifications d'achievements
+
+### Accessibilité et UX
+- [AccessibilityProvider.tsx](mdc:app/components/AccessibilityProvider.tsx) - Provider d'accessibilité
+- [AccessibilityPanel.tsx](mdc:app/components/AccessibilityPanel.tsx) - Panneau d'accessibilité
+- [VirtualKeyboard.tsx](mdc:app/components/VirtualKeyboard.tsx) - Clavier virtuel
+- [PWAInstallPrompt.tsx](mdc:app/components/PWAInstallPrompt.tsx) - Prompt d'installation PWA
+- [GameBlocker.tsx](mdc:app/components/GameBlocker.tsx) - Bloqueur de jeu pour focus
+
+## Stores Zustand
+
+### Gestion d'État
+- [gameStore.ts](mdc:app/stores/gameStore.ts) - État du jeu principal
+- [progressionStore.ts](mdc:app/stores/progressionStore.ts) - Progression et achievements
+- [tutorialStore.ts](mdc:app/stores/tutorialStore.ts) - État des tutoriels
+- [challengeStore.ts](mdc:app/stores/challengeStore.ts) - État des défis
+
+## Moteurs et Logique Métier
+
+### Moteurs de Simulation
+- [terminalEngine.ts](mdc:app/lib/terminalEngine.ts) - Moteur de terminal complet
+- [sandboxEngine.ts](mdc:app/lib/sandboxEngine.ts) - Moteur sandbox pour tests
+
+### Données et Contenu
+- [tutorials.ts](mdc:app/lib/tutorials.ts) - Base de données des tutoriels
+- [challenges.ts](mdc:app/lib/challenges.ts) - Base de données des défis
+- [glossary.ts](mdc:app/lib/glossary.ts) - Glossaire complet des commandes
+- [quizStorage.ts](mdc:app/lib/quizStorage.ts) - Gestion des quiz
+
+## Hooks Personnalisés
+
+### Hooks Utilitaires
+- [usePWA.ts](mdc:app/hooks/usePWA.ts) - Hook pour fonctionnalités PWA
+- [useKeyboardNavigation.ts](mdc:app/hooks/useKeyboardNavigation.ts) - Navigation clavier
+- [useResponsive.ts](mdc:app/hooks/useResponsive.ts) - Gestion responsive
+- [useDebugMode.ts](mdc:app/hooks/useDebugMode.ts) - Mode debug
+
+## Structure des Routes
+
+### Pages Principales
+- [page.tsx](mdc:app/page.tsx) - Page d'accueil
+- [layout.tsx](mdc:app/layout.tsx) - Layout principal avec providers
+
+### Modules Spécialisés
+- `app/game/` - Module de jeu principal
+- `app/tutorials/` - Module des tutoriels
+- `app/challenges/` - Module des défis
+- `app/quiz/` - Module des quiz
+- `app/glossary/` - Module du glossaire
+- `app/training/` - Module d'entraînement
+
+## Configuration
+
+### Fichiers de Configuration
+- [next.config.ts](mdc:next.config.ts) - Configuration Next.js avec PWA
+- [tsconfig.json](mdc:tsconfig.json) - Configuration TypeScript
+- [tailwind.config.js](mdc:tailwind.config.js) - Configuration Tailwind CSS
+- [package.json](mdc:package.json) - Dépendances et scripts
+
+### Métadonnées et SEO
+- [manifest.ts](mdc:app/manifest.ts) - Manifest PWA
+- [sitemap.ts](mdc:app/sitemap.ts) - Sitemap dynamique
+- [StructuredData.tsx](mdc:app/components/StructuredData.tsx) - Données structurées
+
+## Conventions de Développement
+
+### Standards de Code
+- **Langue**: Interface en français, code et commentaires en français
+- **TypeScript**: Typage strict avec interfaces complètes
+- **Composants**: Functional components avec hooks
+- **État**: Zustand pour l'état global, useState pour l'état local
+- **Styling**: Tailwind CSS avec classes utilitaires
+
+### Patterns Architecturaux
+- **Composition**: Préférer la composition à l'héritage
+- **Hooks**: Logique réutilisable dans des hooks personnalisés
+- **Providers**: Context pour les fonctionnalités transversales
+- **Stores**: État global avec Zustand, persistance localStorage
+- **Modules**: Organisation par fonctionnalité (game, tutorials, etc.)
+
+### Performance et UX
+- **Lazy Loading**: Chargement différé des composants lourds
+- **Memoization**: React.memo et useMemo pour optimiser
+- **Animations**: Framer Motion pour les transitions fluides
+- **Responsive**: Design mobile-first avec Tailwind
+- **Accessibilité**: Support complet ARIA et navigation clavier

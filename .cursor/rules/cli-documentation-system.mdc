@@ -3,10 +3,10 @@ description:
 globs:
 alwaysApply: false
 ---
-# Système de Documentation CLI
+# TerminalQuest - Système de Documentation CLI
 
 ## Vue d'ensemble
-Le [CLIDocumentation.tsx](mdc:app/components/CLIDocumentation.tsx) fournit une documentation complète et interactive des commandes Linux avec recherche et exemples authentiques.
+Le système de documentation CLI de TerminalQuest fournit une référence complète et interactive des commandes Linux via le [GlossaryInterface.tsx](mdc:app/components/GlossaryInterface.tsx) avec recherche avancée et exemples authentiques.
 
 ## Structure des Commandes
 

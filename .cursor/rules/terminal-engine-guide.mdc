@@ -3,10 +3,10 @@ description:
 globs:
 alwaysApply: false
 ---
-# Terminal Engine - Guide de Développement
+# TerminalQuest - Guide du Moteur Terminal
 
 ## Vue d'ensemble
-Le [terminalEngine.ts](mdc:app/lib/terminalEngine.ts) simule un terminal Linux authentique avec toutes les commandes de base et la gestion des erreurs réalistes.
+Le [terminalEngine.ts](mdc:app/lib/terminalEngine.ts) et [sandboxEngine.ts](mdc:app/lib/sandboxEngine.ts) simulent un terminal Linux authentique avec toutes les commandes de base et la gestion des erreurs réalistes.
 
 ## Commandes Implémentées
 

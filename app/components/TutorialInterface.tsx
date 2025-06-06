@@ -21,7 +21,7 @@ interface TutorialInterfaceProps {
 }
 
 export const TutorialInterface: React.FC<TutorialInterfaceProps> = ({ onBack }) => {
-  const [selectedLevel, setSelectedLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('beginner');
+  const [selectedLevel, setSelectedLevel] = useState<'beginner' | 'intermediate' | 'advanced' | 'expert'>('beginner');
   const [selectedTutorial, setSelectedTutorial] = useState<Tutorial | null>(null);
   
   const { 
@@ -49,6 +49,7 @@ export const TutorialInterface: React.FC<TutorialInterfaceProps> = ({ onBack }) 
       case 'beginner': return 'from-green-500 to-emerald-500';
       case 'intermediate': return 'from-blue-500 to-cyan-500';
       case 'advanced': return 'from-purple-500 to-pink-500';
+      case 'expert': return 'from-red-500 to-orange-500';
       default: return 'from-gray-500 to-gray-600';
     }
   };
@@ -58,6 +59,7 @@ export const TutorialInterface: React.FC<TutorialInterfaceProps> = ({ onBack }) 
       case 'beginner': return 'bg-green-500/20 text-green-400 border-green-500/30';
       case 'intermediate': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
       case 'advanced': return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
+      case 'expert': return 'bg-red-500/20 text-red-400 border-red-500/30';
       default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
     }
   };
@@ -116,8 +118,8 @@ export const TutorialInterface: React.FC<TutorialInterfaceProps> = ({ onBack }) 
           transition={{ delay: 0.2 }}
           className="mb-8"
         >
-          <div className="flex gap-4 justify-center">
-            {(['beginner', 'intermediate', 'advanced'] as const).map((level) => (
+          <div className="flex gap-4 justify-center flex-wrap">
+            {(['beginner', 'intermediate', 'advanced', 'expert'] as const).map((level) => (
               <button
                 key={level}
                 onClick={() => setSelectedLevel(level)}
@@ -130,6 +132,7 @@ export const TutorialInterface: React.FC<TutorialInterfaceProps> = ({ onBack }) 
                 {level === 'beginner' && '🌱 Débutant'}
                 {level === 'intermediate' && '🚀 Intermédiaire'}
                 {level === 'advanced' && '⚡ Avancé'}
+                {level === 'expert' && '🔥 Expert'}
               </button>
             ))}
           </div>
@@ -284,7 +287,7 @@ export const TutorialInterface: React.FC<TutorialInterfaceProps> = ({ onBack }) 
             <Trophy className="w-6 h-6 text-yellow-400" />
             Vos Statistiques
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-400">
                 {getTutorialsByLevel('beginner').filter(t => completedTutorials.includes(t.id)).length}
@@ -302,6 +305,12 @@ export const TutorialInterface: React.FC<TutorialInterfaceProps> = ({ onBack }) 
                 {getTutorialsByLevel('advanced').filter(t => completedTutorials.includes(t.id)).length}
               </div>
               <div className="text-sm text-gray-400">Avancé complétés</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-red-400">
+                {getTutorialsByLevel('expert').filter(t => completedTutorials.includes(t.id)).length}
+              </div>
+              <div className="text-sm text-gray-400">Expert complétés</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-yellow-400">
