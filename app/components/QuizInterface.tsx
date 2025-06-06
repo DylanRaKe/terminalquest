@@ -822,7 +822,7 @@ export function QuizInterface() {
                 🎮 Retour au Jeu
               </Link>
               <Link
-                href="/docs"
+                href="/glossary"
                 className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-200 flex items-center gap-2"
               >
                 <BookOpen className="w-4 h-4" />

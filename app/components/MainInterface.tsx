@@ -19,7 +19,7 @@ export function MainInterface() {
   const cards = useMemo(() => [
     { id: 'game', href: '/game', available: isDebugMode },
     { id: 'training', href: '/training', available: true },
-    { id: 'docs', href: '/docs', available: true },
+    { id: 'glossary', href: '/glossary', available: true },
     { id: 'quiz', href: '/quiz', available: true }
   ], [isDebugMode])
 
@@ -344,7 +344,7 @@ export function MainInterface() {
             whileTap={{ scale: 0.98 }}
             className="group relative"
           >
-            <Link href="/docs" className="block h-full">
+                            <Link href="/glossary" className="block h-full">
               <div className="relative bg-gradient-to-br from-orange-900/80 to-red-900/80 backdrop-blur-xl rounded-3xl p-8 border border-orange-500/30 hover:border-orange-400/60 transition-all duration-500 h-full cursor-pointer overflow-hidden">
                 {/* Effet de brillance */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />

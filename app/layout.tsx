@@ -5,6 +5,7 @@ import { Navigation } from "./components/Navigation";
 import { StructuredData } from "./components/StructuredData";
 import { AccessibilityProvider } from "./components/AccessibilityProvider";
 import { AccessibilityPanel } from "./components/AccessibilityPanel";
+import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 // import { ProgressionProvider } from "./components/ProgressionProvider";
 // import { ProgressionPanel } from "./components/ProgressionPanel";
 // import { AchievementNotification } from "./components/AchievementNotification";
@@ -77,6 +78,7 @@ export default function RootLayout({
             <Navigation />
             {children}
             <AccessibilityPanel />
+            <PWAInstallPrompt />
           </div>
         </AccessibilityProvider>
       </body>

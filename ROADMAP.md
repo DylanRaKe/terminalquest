@@ -49,10 +49,10 @@
 - [ ] Contributions communautaires
 
 ### 8. **Glossaire Interactif**
-- [ ] Dictionnaire des termes CLI/Linux
-- [ ] Recherche intelligente
-- [ ] Exemples d'usage
-- [ ] Liens vers documentation
+- [x] Dictionnaire des termes CLI/Linux
+- [x] Recherche intelligente
+- [x] Exemples d'usage
+- [x] Liens vers documentation
 
 ### 9. **Parcours Thématiques**
 - [ ] DevOps & CI/CD
@@ -69,10 +69,10 @@
 - [ ] Webhooks pour notifications
 
 ### 11. **Mode Hors-ligne (PWA)**
-- [ ] Fonctionnement sans internet
-- [ ] Synchronisation automatique
-- [ ] Cache intelligent
-- [ ] Installation sur mobile/desktop
+- [x] Fonctionnement sans internet
+- [x] Synchronisation automatique
+- [x] Cache intelligent
+- [x] Installation sur mobile/desktop
 
 ### 12. **Personnalisation Avancée**
 - [ ] Thèmes visuels (Dark/Light/Terminal classique)
@@ -129,12 +129,12 @@
 ### Phase 1 - Fondations (Court terme)
 1. **Mode Entraînement Libre** - Terminal sandbox
 2. **Système de Progression** - Badges et niveaux
-3. **PWA** - Mode hors-ligne
+3. **PWA** - Mode hors-ligne ✅
 
 ### Phase 2 - Engagement (Moyen terme)
 1. **Défis Quotidiens** - Gamification
 2. **Tutoriels Guidés** - Apprentissage structuré
-3. **Glossaire Interactif** - Référence rapide
+3. **Glossaire Interactif** - Référence rapide ✅
 
 ### Phase 3 - Communauté (Long terme)
 1. **Forum/Discussions** - Entraide

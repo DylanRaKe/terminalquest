@@ -18,7 +18,6 @@ export function Navigation() {
     { href: '/training', label: 'Entraînement', icon: Target },
     { href: '/tutorials', label: 'Tutoriels', icon: BookOpen },
     { href: '/glossary', label: 'Glossaire', icon: Search },
-    { href: '/docs', label: 'Documentation', icon: BookOpen },
     { href: '/quiz', label: 'Quiz', icon: Brain },
   ]
 

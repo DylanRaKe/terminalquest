@@ -5,7 +5,7 @@ Allow: /
 Allow: /
 Allow: /training
 Allow: /quiz
-Allow: /docs
+Allow: /glossary
 Allow: /game
 
 # Sitemap

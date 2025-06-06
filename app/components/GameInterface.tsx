@@ -206,7 +206,7 @@ export function GameInterface() {
               TerminalQuest
             </h1>
             <a
-              href="/docs"
+                              href="/glossary"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg transition-colors"
